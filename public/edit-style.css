@@ -1,0 +1,55 @@
+body {
+    background-color: #121212;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.form-title {
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+.form-box {
+    background-color: #1e1e1e;
+    border: 1px solid #0d6efd;
+    max-width: 900px;
+    margin: auto;
+}
+
+label {
+    color: #ccc;
+}
+
+input,
+select {
+    background-color: #2b2b2b;
+    color: white;
+    border: 1px solid #444;
+}
+
+input:focus,
+select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 5px #0d6efd;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #343a40;
+    border: none;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.image-preview {
+    max-width: 60px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Contacts App</title>
+    <link rel="stylesheet" href="/register-style.css">
+</head>
+
+<body>
+    <div class="register-container">
+        <h2>Create an Account</h2>
+        <form action="/register" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="username">Full Name</label>
+                <input type="text" id="username" name="name" required placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label for="photo">Upload Photo</label>
+                <input type="file" id="photo" name="photo" accept="image/*" />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password" name="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <div class="form-group">
+                <label for="confirmPass">Confirm Password</label>
+                <input type="password" id="confirm" name="confirmPass" required placeholder="Confirm your password">
+            </div>
+            <button type="submit" class="register-btn">Register</button>
+
+            <div class="login-link">
+                Already have an account? <a href="/login">Login</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

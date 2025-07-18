@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact Details</title>
+    <link rel="stylesheet" href="/info-style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+
+    <div id="head">
+        <img src="/logo.png" alt="Logo" id="logo" />
+        <h2>Contact Details</h2>
+    </div>
+
+    <div class="contact-details-container">
+        <div class="contact-card">
+            <div class="left-section">
+                <img src="<%= contact.photo %>" alt="Contact Photo" class="contact-photo" />
+                <h2 class="contact-name">
+                    <%= contact.name %>
+                </h2>
+                <p class="contact-relation"><i class="fa-solid fa-people-arrows"></i>
+                    <%= contact.relation %>
+                </p>
+            </div>
+
+            <div class="right-section">
+                <div class="info-row"><i class="fa-solid fa-phone"></i> <span><%= contact.number %></span></div>
+                <div class="info-row"><i class="fa-solid fa-envelope"></i> <span><%= contact.email %></span></div>
+                <div class="info-row"><i class="fa-solid fa-location-dot"></i> <span><%= contact.city %>, <%= contact.country %></span></div>
+                <div class="info-row"><i class="fa-solid fa-address-card"></i> <span><%= contact.address %></span></div>
+                <div class="info-row"><i class="fa-solid fa-cake-candles"></i> <span><%= contact.bday %></span></div>
+                <div class="info-row"><i class="fa-solid fa-venus-mars"></i> <span><%= contact.gender %></span></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
