@@ -162,6 +162,7 @@ body {
     flex-shrink: 0;
     white-space: nowrap;
     background-color: #1e1e1e;
+    margin-right: 1rem;
 }
 
 .right-icons i {
@@ -199,12 +200,14 @@ body {
 .contact {
     border-top: 1px solid #0d6efd;
     border-bottom: 1px solid #0d6efd;
+    /* margin-top: -3rem; */
+    /* overflow: scroll;    */
 }
 
 .contact-head,
 .ind-contact {
     display: grid;
-    grid-template-columns: 200px 1fr 1fr 2fr;
+    grid-template-columns: 200px 1fr 1fr 2fr auto;
     gap: 1rem;
     align-items: center;
     padding: 1rem 2rem;
@@ -216,6 +219,7 @@ body {
 }
 
 .contact-head {
+    height: 5rem;
     font-weight: bold;
     color: white;
     position: fixed;
@@ -225,11 +229,27 @@ body {
     padding: 1rem 2rem;
 }
 
-.contact:first-child {
-    margin-top: 0.2rem;
+.del-mul {
+    border: none;
+    background-color: #1e1e1e;
 }
 
-.user {
+.del-mul i {
+    color: red;
+}
+
+.del-mul i:hover {
+    color: red;
+    transform: scale(1.06);
+}
+
+.ind-contact.selected {
+    background-color: #1e1e1e;
+    /* light blue or your custom color */
+    transition: background-color 0.3s ease;
+}
+
+.contact .user {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -276,29 +296,32 @@ body {
 
 .content-area {
     flex-grow: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    /* overflow-y: auto;
+    overflow-x: hidden; */
+    /* border: 1px solid red; */
+    /* margin-top: 8rem; */
 }
 
 .contact-wrapper {
+    margin-top: 9rem;
     overflow-x: hidden;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
+    /* border: 1px solid yellow; */
 }
 
 .contact-scroll {
     flex-grow: 0;
     overflow-y: auto;
     overflow-x: auto;
-    margin-top: 4rem;
-    /* This creates space below the fixed .contact-head */
 }
 
-.contact:first-of-type {
+
+/* .contact:first-of-type {
     margin-top: 0.1rem;
-}
+} */
 
 .number,
 .email {
@@ -413,10 +436,6 @@ body {
         right: 0;
         left: auto;
     }
-}
-
-.contact-scroll {
-    padding-top: 3rem;
 }
 
 .folders {

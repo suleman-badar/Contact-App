@@ -11,13 +11,21 @@ const { faker } = require("@faker-js/faker")
 
 
 const methodOverride = require('method-override');
+const { name } = require("ejs");
 
 
 let app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
+
+app.use(express.urlencoded({
+    extended: true,
+    limit: '10mb', // increase payload size
+    parameterLimit: 10000 // increase number of parameters allowed
+}));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(session({
@@ -69,7 +77,7 @@ const MONGO_URL = "mongodb://127.0.0.1:27017/contactsDB";
 
 main().then(async() => {
     console.log("Main Connection Successsful");
-    await createFakeContacts(20);
+    await createFakeContacts(5);
     // if (count === 0) {
     //     await createFakeContacts(20);
     // } else {
@@ -103,6 +111,31 @@ app.get("/home", async(req, res) => {
         res.status(500).send("Error loading contacts: " + err.message);
     }
 });
+
+// search engine
+app.get("/home/search", async(req, res) => {
+    if (!req.session.userId) return res.redirect("/login");
+    try {
+        let { search } = req.query;
+        let userId = req.session.userId;
+        const filter = { userId };
+
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { number: { $regex: search, $options: "i" } },
+                { email: { $regex: search, $options: "i" } },
+            ]
+        }
+        let flag = true;
+        const user = await User.findById(userId);
+        const contacts = await Contact.find(filter);
+        res.render("home", { allContacts: contacts, userId, userPhoto: user.photo, flag })
+    } catch (err) {
+        res.status(500).send("Error searching contact: " + err.message);
+    }
+});
+
 
 app.get("/folders", async(req, res) => {
     if (!req.session.userId) return res.redirect("/login");
@@ -247,6 +280,24 @@ app.delete("/home/delete/:id", async(req, res) => {
 });
 
 
+//delete multiple
+app.post("/home/delete-mul", async(req, res) => {
+    let contactIds = req.body.contactIds;
+    if (!Array.isArray(contactIds)) {
+        contactIds = [contactIds];
+    }
+    try {
+        await Contact.deleteMany({ _id: { $in: contactIds } });
+        res.redirect("/home");
+    } catch (err) {
+        rconsole.error("Failed to delete contacts:", err);
+        res.status(500).send("Error deleting contacts.");
+    }
+});
+
+
+
+
 //sending login details to database
 app.post("/register", upload.single("photo"), async(req, res) => {
     try {
@@ -285,4 +336,4 @@ app.put("/login", async(req, res) => {
     } catch (err) {
         res.status(500).send("Server error: " + err.message);
     }
-})
+});

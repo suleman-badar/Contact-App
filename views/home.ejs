@@ -25,26 +25,24 @@
                 <li><a class="dropdown-item" href="/about">About</a></li>
             </ul>
         </div>
-        <img src="./Assets/logo.png" alt="Some Logo" id="logo">
+        <img src="/Assets/logo.png" alt="Some Logo" id="logo">
         <div class="search-wrapper" style="background-color: #1e1e1e;">
-            <form class="search-form" role="search">
-                <input class="form-control me-2 custom-search" type="search" placeholder="Search contacts" aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
+            <form class="search-form" role="search" action="/home/search" method="GET">
+                <input name="search" class="form-control me-2 custom-search" type="search" placeholder="Search contacts" aria-label="Search">
+                <button class=" btn btn-outline-primary " type="submit ">Search</button>
             </form>
-            <i class="fa-solid fa-magnifying-glass search-icon" style=" background-color: #1e1e1e; "></i>
+            <i class="fa-solid fa-magnifying-glass search-icon " style=" background-color: #1e1e1e; "></i>
         </div>
-        <div class="right-icons">
-            <i class="fa-solid fa-circle-plus" onclick="window.location.href='home/add-contact'"></i>
-            <div class="dropdown" style=" background-color: inherit;">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="user-icon-wrapper" style="background-color: #1e1e1e; width: 36px; height: 36px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                        <% if (userPhoto && userPhoto.trim() !== '') { %>
-                            <img src="<%= userPhoto %>" alt="User Photo" style="width: 100%; height: 100%; object-fit: cover;">
+        <div class="right-icons ">
+            <i class="fa-solid fa-circle-plus " onclick="window.location.href='home/add-contact' "></i>
+            <div class="dropdown " style=" background-color: inherit; ">
+                <div class="dropdown-toggle user-icon-wrapper " data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer ; background-color: #1e1e1e; width: 36px; height: 36px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; ">
+                    <% if (userPhoto && userPhoto.trim() !== '') { %>
+                        <img src="<%=userPhoto %>" alt="User Photo" style="width: 100%; height: 100%; object-fit: cover;">
                         <% } else { %>
                             <i class="fa-solid fa-circle-user text-light" style="font-size: 26px;"></i>
-                        <% } %>
-                    </div>
-                </button>
+                            <% } %>
+                </div>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/home/profile/<%=userId%>">Profile</a></li>
                     <li><a class="dropdown-item" href="/about">About</a></li>
@@ -73,46 +71,50 @@
             <% if(flag){ %>
                 <div class="contact-wrapper">
                     <div class="contact-scroll">
-                        <div class="contact-head">
-                            <span class="user" style="background-color: inherit;">
-                            <input type="checkbox" name="subscribe" value="no">
+                        <form method="post" action="/home/delete-mul">
+                            <div class="contact-head">
+                                <span class="user" style="background-color: inherit;">
+                            <input type="checkbox" id="selectAll" >
                             <span class="name" style="background-color: inherit;">Name</span>
-                            </span>
-                            <span></span>
-                            <span class="number" style="background-color: inherit;">Contact</span>
-                            <span class="email" style="background-color: inherit;">
-                            <span ></span>
-                            <span style="background-color: inherit;">Mail</span>
-                            </span>
-                        </div>
-                        <div class="contact">
-                            <% for(let contact of allContacts){ %>
-                                <div class="ind-contact" style="overflow:visible;">
-                                    <div class="user" style="background-color: inherit;">
-                                        <input type="checkbox" name="contactIds" value="<%= contact._id %>">
-                                        <img src="<%=contact.photo%>" alt="user" />
-                                        <span class="name" style="background-color: inherit;"><%=contact.name%></span>
-                                    </div>
-                                    <div style="background-color: inherit;">
-                                        <a href="/home/info/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-circle-info" id="info" style="background-color: inherit;" ></i></a>
-                                        <a href="/home/edit/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-pen-to-square" id="info" style="background-color: inherit;" ></i></a>
-                                        <form action="/home/delete/<%= contact._id %>?_method=DELETE" method="POST" style="display:inline; background-color: inherit;">
-                                            <button type="submit" style="border:none; background: inherit; padding: 0; color: inherit; cursor: pointer;">
-                                            <i class="fa-solid fa-trash" id="info" style="background-color: inherit;"></i>
+                                </span>
+                                <span></span>
+                                <span class="number" style="background-color: inherit;">Contact</span>
+                                <span class="email" style="background-color: inherit;">
+                                <span style="background-color: inherit;">Mail</span>
+                                <span></span>
+                                </span>
+                                <button type="submit" class="del-mul"> <i class="fa-solid fa-trash"  id="deleteBtn" style="background-color: inherit;display: none;"></i></button>
+                            </div>
+                            <div class="contact">
+                                <% for(let contact of allContacts){ %>
+                                    <div class="ind-contact" style="overflow:visible;">
+                                        <div class="user" style="background-color: inherit;">
+                                            <input type="checkbox" class="contact-checkbox" name="contactIds" value="<%= contact._id %>">
+                                            <img src="<%=contact.photo%>" alt="user" />
+                                            <span class="name" style="background-color: inherit;"><%=contact.name%></span>
+                                        </div>
+                                        <div style="background-color: inherit;">
+                                            <a href="/home/info/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-circle-info" id="info" style="background-color: inherit;" ></i></a>
+                                            <a href="/home/edit/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-pen-to-square" id="info" style="background-color: inherit;" ></i></a>
+                                            <form action="/home/delete/<%= contact._id %>?_method=DELETE" method="POST" style="display:inline; background-color: inherit;">
+                                                <button type="submit" style="border:none; background: inherit; padding: 0; color: inherit; cursor: pointer;">
+                                            <i class="fa-solid fa-trash"  style="background-color: inherit;"></i>
                                         </button>
-                                        </form>
-                                        <i class="" id="delete" style="background-color: inherit;"></i>
+                                            </form>
+                                            <i class="" id="delete" style="background-color: inherit;"></i>
+                                        </div>
+                                        <div class="number" style="background-color: inherit;">
+                                            <i class="fa-solid fa-phone" style="background-color: inherit;"></i>
+                                            <span style="background-color: inherit;"><%=contact.number%></span>
+                                        </div>
+                                        <div class="email" style="background-color: inherit;">
+                                            <i class="fa-solid fa-envelope" style="background-color: inherit;"></i>
+                                            <span style="background-color: inherit;"><%=contact.email%></span>
+                                        </div>
                                     </div>
-                                    <div class="number" style="background-color: inherit;">
-                                        <i class="fa-solid fa-phone" style="background-color: inherit;"></i>
-                                        <span style="background-color: inherit;"><%=contact.number%></span>
-                                    </div>
-                                    <div class="email" style="background-color: inherit;">
-                                        <i class="fa-solid fa-envelope" style="background-color: inherit;"></i>
-                                        <span style="background-color: inherit;"><%=contact.email%></span>
-                                    </div>
-                                </div>
-                                <% } %>
+                                    <% } %>
+                        </form>
+
                         </div>
                     </div>
                 </div>
@@ -126,7 +128,9 @@
                                     <div class="card folder-card shadow">
                                         <div class="card-body">
                                             <% for(let folder of allFolders){ %>
-                                                <h5 class="card-title">folder.name</h5>
+                                                <h5 class="card-title">
+                                                    <%=folder.name%>
+                                                </h5>
                                                 <div class="d-flex justify-content-between mt-3">
                                                     <button class="btn btn-sm btn-outline-primary">Edit</button>
                                                     <button class="btn btn-sm btn-outline-danger">Delete</button>
@@ -136,13 +140,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <%  } %>
                         </div>
                     </div>
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+                    <%  } %>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 
-                    <script src="app.js"></script>
+
+    <script src="app.js"></script>
 </body>
 
 </html>
