@@ -3,6 +3,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const Contact = require("./models/contact.js");
 const User = require("./models/user.js");
+const Folder = require("./models/folder.js");
 const multer = require("multer");
 const session = require("express-session");
 const { faker } = require("@faker-js/faker")
@@ -87,9 +88,6 @@ async function main() {
     await mongoose.connect(MONGO_URL);
 };
 
-
-
-
 app.get("/", (req, res) => {
     res.render("landing.ejs");
 });
@@ -97,9 +95,22 @@ app.get("/", (req, res) => {
 app.get("/home", async(req, res) => {
     if (!req.session.userId) return res.redirect("/login");
     try {
+        let flag = true;
         const user = await User.findById(req.session.userId);
         const allContacts = await Contact.find({ userId: req.session.userId });
-        res.render("home", { allContacts, userId: req.session.userId, userPhoto: user.photo }); // send contacts to EJS
+        res.render("home", { allContacts, userId: req.session.userId, userPhoto: user.photo, flag }); // send contacts to EJS
+    } catch (err) {
+        res.status(500).send("Error loading contacts: " + err.message);
+    }
+});
+
+app.get("/folders", async(req, res) => {
+    if (!req.session.userId) return res.redirect("/login");
+    try {
+        let flag = false;
+        const user = await User.findById(req.session.userId);
+        const allFolders = await Folder.find({ userId: req.session.userId });
+        res.render("home", { allFolders, userId: req.session.userId, userPhoto: user.photo, flag }); // send contacts to EJS
     } catch (err) {
         res.status(500).send("Error loading contacts: " + err.message);
     }
@@ -122,6 +133,11 @@ app.get("/features", (req, res) => {
 app.get("/home/add-contact", (req, res) => {
     res.render("add-contact.ejs");
 });
+app.get("/home/help", (req, res) => {
+    res.render("help.ejs");
+});
+
+
 
 
 
