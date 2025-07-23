@@ -89,7 +89,7 @@ main().then(async() => {
 });
 
 async function main() {
-    await mongoose.connect('mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/test?retryWrites=true&w=majority&appName=Contacts');
+    await mongoose.connect('mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/contactsDB?retryWrites=true&w=majority&appName=Contacts');
 };
 
 app.get("/", (req, res) => {
