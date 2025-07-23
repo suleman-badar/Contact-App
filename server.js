@@ -47,6 +47,7 @@ const upload = multer({ storage: storage });
 
 const fakeUserId = '687a25b75f659c85dadadc25';
 
+
 const createFakeContacts = async(count) => {
     const contacts = [];
 
@@ -78,11 +79,6 @@ const MONGO_URL = "mongodb://127.0.0.1:27017/contactsDB";
 main().then(async() => {
     console.log("Main Connection Successsful");
     await createFakeContacts(5);
-    // if (count === 0) {
-    //     await createFakeContacts(20);
-    // } else {
-    //     console.log("Fake contacts already exist. Skipping insert.");
-    // }
 
     app.listen(port, () => {
         console.log("working");
@@ -104,9 +100,14 @@ app.get("/home", async(req, res) => {
     if (!req.session.userId) return res.redirect("/login");
     try {
         let flag = true;
-        const user = await User.findById(req.session.userId);
-        const allContacts = await Contact.find({ userId: req.session.userId });
-        res.render("home", { allContacts, userId: req.session.userId, userPhoto: user.photo, flag }); // send contacts to EJS
+        const userId = req.session.userId;
+        const user = await User.findById(userId);
+        const allContacts = await Contact.find({ userId });
+        const allFolders = await Folder.find({ userId });
+        const folderFlag = req.query.addToFolder === "true";
+        const folderId = req.query.folderId;
+
+        res.render("home", { allContacts, allFolders, userId, userPhoto: user.photo, flag, folderFlag, folderId }); // send contacts to EJS
     } catch (err) {
         res.status(500).send("Error loading contacts: " + err.message);
     }
@@ -130,24 +131,100 @@ app.get("/home/search", async(req, res) => {
         let flag = true;
         const user = await User.findById(userId);
         const contacts = await Contact.find(filter);
-        res.render("home", { allContacts: contacts, userId, userPhoto: user.photo, flag })
+        res.render("home", { allContacts: contacts, userId, userPhoto: user.photo, flag, folderFlag: false })
     } catch (err) {
         res.status(500).send("Error searching contact: " + err.message);
     }
 });
 
-
+//to get folders
 app.get("/folders", async(req, res) => {
     if (!req.session.userId) return res.redirect("/login");
     try {
         let flag = false;
         const user = await User.findById(req.session.userId);
         const allFolders = await Folder.find({ userId: req.session.userId });
-        res.render("home", { allFolders, userId: req.session.userId, userPhoto: user.photo, flag }); // send contacts to EJS
+        res.render("home", { allFolders, userId: req.session.userId, userPhoto: user.photo, flag, folderFlag: true }); // send contacts to EJS
     } catch (err) {
         res.status(500).send("Error loading contacts: " + err.message);
     }
 });
+
+// to add contacts to a folder 
+app.post("/home/add-to-folder", async(req, res) => {
+    try {
+        const { folderId, contactIds } = req.body;
+        if (!folderId || !contactIds) {
+            return res.status(400).send("Missing folderId or contactIds");
+        }
+
+        await Folder.findByIdAndUpdate(folderId, {
+            $addToSet: { contacts: { $each: Array.isArray(contactIds) ? contactIds : [contactIds] } }
+        });
+
+        res.redirect("/folders"); // or redirect to /folders if that's where you're showing them
+    } catch (err) {
+        console.error("Error creating folder:", err);
+        res.status(500).send("Error creating folder: " + err.message);
+    }
+});
+
+
+//to create new folders
+app.post("/folders/create", async(req, res) => {
+    try {
+        const { name } = req.body;
+        const userId = req.session.userId;
+
+        if (!name) return res.status(400).send("Missing folder name");
+
+        const newFolder = new Folder({ name, userId });
+        await newFolder.save();
+        res.redirect("/folders");
+    } catch (err) {
+        console.error("Error creating folder:", err);
+        res.status(500).send("Error creating folder: " + err.message);
+    }
+});
+
+
+//to open contacts present in each folder
+app.get("/folders/:folderId", async(req, res) => {
+    try {
+        const folderId = req.params.folderId;
+        const folder = await Folder.findById(folderId).populate("contacts");
+        const allContacts = await Contact.find({ folderId });
+        const userId = req.session.userId;
+        const user = await User.findById(userId);
+
+        res.render("home", {
+            allContacts: folder.contacts,
+            userId,
+            userPhoto: user.photo,
+            flag: true,
+            folderFlag: false
+        });
+    } catch (err) {
+        console.error("Error:", err);
+        res.status(500).send("Error opening folder: " + err.message);
+    }
+});
+
+//to delete folders
+app.delete("/folders/delete/:folderId", async(req, res) => {
+    try {
+        const folderId = req.params.folderId;
+        await Folder.findByIdAndDelete(folderId);
+        res.redirect("/folders");
+    } catch (err) {
+        console.error("Error:", err);
+        res.status(500).send("Error deleting folder: " + err.message);
+    }
+});
+
+
+
+
 
 app.get("/login", (req, res) => {
     res.render("login.ejs");
@@ -192,7 +269,8 @@ app.post("/home/add-contact", upload.single('photo'), async(req, res) => {
             gender,
             city,
             country,
-            userId: req.session.userId
+            userId: req.session.userId,
+            folderId: req.body.folderId
         });
         await newContact.save();
         res.redirect('/home');
@@ -281,7 +359,7 @@ app.delete("/home/delete/:id", async(req, res) => {
 
 
 //delete multiple
-app.post("/home/delete-mul", async(req, res) => {
+app.delete("/home/delete-mul", async(req, res) => {
     let contactIds = req.body.contactIds;
     if (!Array.isArray(contactIds)) {
         contactIds = [contactIds];
@@ -302,10 +380,11 @@ app.post("/home/delete-mul", async(req, res) => {
 app.post("/register", upload.single("photo"), async(req, res) => {
     try {
         const { name, email, photo, password, confirmPass } = req.body;
-        let photoPath = req.file ? `/uploads/${req.file.filename}` : user.photo;
         if (password != confirmPass) {
             return res.send("Passwords do not match.");
         }
+        let photoPath = req.file ? `/uploads/${req.file.filename}` : "";
+
         const user = new User({
             name,
             photo: photoPath,

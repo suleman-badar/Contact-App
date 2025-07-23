@@ -50,7 +50,6 @@ function toggleDeleteBtn(checkbox) {
 
 
 selectAll.addEventListener('change', () => {
-
     checkboxes.forEach(cb => {
         cb.checked = selectAll.checked;
         toggleDeleteBtn(cb);

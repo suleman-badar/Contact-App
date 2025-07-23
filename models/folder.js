@@ -9,8 +9,13 @@ const folderSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }
+    },
+    contacts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Contact' // Make sure your model name is 'Contact'
+    }]
+
 });
 
-const folder = mongoose.model("folder", folderSchema);
-module.exports = folder;
+const Folder = mongoose.model("Folder", folderSchema);
+module.exports = Folder;

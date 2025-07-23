@@ -19,8 +19,8 @@
                   <i class="fas fa-bars fa-xl"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">My contacts</a></li>
-                <li><a class="dropdown-item" href="#">Folders</a></li>
+                <li><a class="dropdown-item" href="/home">My contacts</a></li>
+                <li><a class="dropdown-item" href="/folders">Folders</a></li>
                 <li><a class="dropdown-item" href="/features">Features</a></li>
                 <li><a class="dropdown-item" href="/about">About</a></li>
             </ul>
@@ -62,7 +62,7 @@
                 <li><a href="/features">Features</a></li>
                 <div id="add-btn">
                     <button class="add" onclick="window.location.href='home/add-contact'"><i class="fa-solid fa-plus" style="background-color: inherit;"></i>Add Contact</button>
-                    <button class="add"><i class="fa-solid fa-plus" style="background-color: inherit;"></i>Add Folder</button>
+                    <button class="add" data-bs-toggle="modal" data-bs-target="#addFolderModal"><i class="fa-solid fa-plus" style="background-color: inherit;" ></i>Add Folder</button>
                     <button class="add" onclick="window.location.href='home/help'" style="margin-top: 2.5rem;"><i class="fa-solid fa-circle-info" style="background-color: inherit;"></i>Help</button>
                 </div>
             </ul>
@@ -71,50 +71,63 @@
             <% if(flag){ %>
                 <div class="contact-wrapper">
                     <div class="contact-scroll">
-                        <form method="post" action="/home/delete-mul">
-                            <div class="contact-head">
-                                <span class="user" style="background-color: inherit;">
-                            <input type="checkbox" id="selectAll" >
-                            <span class="name" style="background-color: inherit;">Name</span>
-                                </span>
-                                <span></span>
-                                <span class="number" style="background-color: inherit;">Contact</span>
-                                <span class="email" style="background-color: inherit;">
-                                <span style="background-color: inherit;">Mail</span>
-                                <span></span>
-                                </span>
-                                <button type="submit" class="del-mul"> <i class="fa-solid fa-trash"  id="deleteBtn" style="background-color: inherit;display: none;"></i></button>
-                            </div>
-                            <div class="contact">
-                                <% for(let contact of allContacts){ %>
-                                    <div class="ind-contact" style="overflow:visible;">
-                                        <div class="user" style="background-color: inherit;">
-                                            <input type="checkbox" class="contact-checkbox" name="contactIds" value="<%= contact._id %>">
-                                            <img src="<%=contact.photo%>" alt="user" />
-                                            <span class="name" style="background-color: inherit;"><%=contact.name%></span>
-                                        </div>
-                                        <div style="background-color: inherit;">
-                                            <a href="/home/info/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-circle-info" id="info" style="background-color: inherit;" ></i></a>
-                                            <a href="/home/edit/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-pen-to-square" id="info" style="background-color: inherit;" ></i></a>
-                                            <form action="/home/delete/<%= contact._id %>?_method=DELETE" method="POST" style="display:inline; background-color: inherit;">
-                                                <button type="submit" style="border:none; background: inherit; padding: 0; color: inherit; cursor: pointer;">
+                        <form method="POST" action="<%= folderFlag ? '/home/add-to-folder' : '/home/delete-mul?_method=DELETE' %>">
+                            <% if (folderFlag && folderId) { %>
+                                <input type="hidden" name="folderId" value="<%= folderId %>">
+                                <% } %>
+                                    <div class="contact-head">
+                                        <span class="user" style="background-color: inherit;">
+                                            <input type="checkbox" id="selectAll" >
+                                            <span class="name" style="background-color: inherit;">Name</span>
+                                        </span>
+                                        <span></span>
+                                        <span class="number" style="background-color: inherit;">Contact</span>
+                                        <span class="email" style="background-color: inherit;">
+                                              <span style="background-color: inherit;">Mail
+                                        </span>
+                                        <span></span>
+                                        </span>
+
+                                        <% if (folderFlag) { %>
+                                            <div class="d-flex  align-items-center justify-content-end" style="gap: 1rem;background-color:inherit;">
+                                                <button type="submit" class="btn btn-sm btn-primary">Add to Folder</button>
+                                            </div>
+                                            <% } else { %>
+                                                <button type="submit" class="del-mul" style="background-color: inherit;width:40px;margin-left:200px;"> 
+                                                      <i class="fa-solid fa-trash" id="deleteBtn" style="background-color: inherit; display: none;"></i>
+                                                </button>
+                                                <% } %>
+                                                    <button type="submit" class="del-mul" style="background-color: inherit;"> <i class="fa-solid fa-trash"  id="deleteBtn" style="background-color: inherit;display: none;"></i></button>
+                                    </div>
+                                    <div class="contact">
+                                        <% for(let contact of allContacts){ %>
+                                            <div class="ind-contact" style="overflow:visible;">
+                                                <div class="user" style="background-color: inherit;">
+                                                    <input type="checkbox" class="contact-checkbox" name="contactIds" value="<%= contact._id %>">
+                                                    <img src="<%=contact.photo%>" alt="user" />
+                                                    <span class="name" style="background-color: inherit;"><%=contact.name%></span>
+                                                </div>
+                                                <div style="background-color: inherit;">
+                                                    <a href="/home/info/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-circle-info" id="info" style="background-color: inherit;" ></i></a>
+                                                    <a href="/home/edit/<%=contact._id%>" style="background-color: inherit;"><i class="fa-solid fa-pen-to-square" id="info" style="background-color: inherit;" ></i></a>
+                                                    <form action="/home/delete/<%= contact._id %>?_method=DELETE" method="POST" style="display:inline; background-color: inherit;">
+                                                        <button type="submit" style="border:none; background: inherit; padding: 0; color: inherit; cursor: pointer;">
                                             <i class="fa-solid fa-trash"  style="background-color: inherit;"></i>
                                         </button>
-                                            </form>
-                                            <i class="" id="delete" style="background-color: inherit;"></i>
-                                        </div>
-                                        <div class="number" style="background-color: inherit;">
-                                            <i class="fa-solid fa-phone" style="background-color: inherit;"></i>
-                                            <span style="background-color: inherit;"><%=contact.number%></span>
-                                        </div>
-                                        <div class="email" style="background-color: inherit;">
-                                            <i class="fa-solid fa-envelope" style="background-color: inherit;"></i>
-                                            <span style="background-color: inherit;"><%=contact.email%></span>
-                                        </div>
-                                    </div>
-                                    <% } %>
+                                                    </form>
+                                                    <i class="" id="delete" style="background-color: inherit;"></i>
+                                                </div>
+                                                <div class="number" style="background-color: inherit;">
+                                                    <i class="fa-solid fa-phone" style="background-color: inherit;"></i>
+                                                    <span style="background-color: inherit;"><%=contact.number%></span>
+                                                </div>
+                                                <div class="email" style="background-color: inherit;">
+                                                    <i class="fa-solid fa-envelope" style="background-color: inherit;"></i>
+                                                    <span style="background-color: inherit;"><%=contact.email%></span>
+                                                </div>
+                                            </div>
+                                            <% } %>
                         </form>
-
                         </div>
                     </div>
                 </div>
@@ -122,34 +135,75 @@
                 <% } else{ %>
                     <div class="folders">
                         <div class="container my-5 folder-wrapper">
-                            <h2 class="text-center text-primary mb-4">📁 My Folders</h2>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h2 class="text-primary">📁 My Folders</h2>
+                                <!-- <i class="fa-solid fa-folder-plus me-1"></i> Add Folder -->
+                                <!-- Add Icon (trigger) -->
+                                <i class="fa-solid fa-folder-plus me-1" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#addFolderModal"> Create Folder</i>
+                            </div>
                             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                                <div class="col">
-                                    <div class="card folder-card shadow">
-                                        <div class="card-body">
-                                            <% for(let folder of allFolders){ %>
-                                                <h5 class="card-title">
-                                                    <%=folder.name%>
+                                <% for (let folder of allFolders) { %>
+                                    <div class="col">
+                                        <div class="card folder-card shadow">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-primary">
+                                                    <%= folder.name %>
                                                 </h5>
                                                 <div class="d-flex justify-content-between mt-3">
-                                                    <button class="btn btn-sm btn-outline-primary">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <form action="/home" method="get">
+                                                        <input type="hidden" name="addToFolder" value="true" />
+                                                        <input type="hidden" name="folderId" value="<%= folder._id %>" />
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fa-solid fa-pen-to-square me-1" style="background-color: inherit;"></i>Add Contacts
+                                                        </button>
+                                                    </form>
+                                                    <form action="/folders/<%= folder._id %>" method="get">
+                                                        <input type="hidden" name="addToFolder" value="false" />
+                                                        <!-- <input type="hidden" name="folderId" value="<%= folder._id %>" /> -->
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fa-solid fa-eye" style="background-color: inherit;"></i>View
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="/folders/delete/<%= folder._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure?')">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="fa-solid fa-trash me-1" style="background-color: inherit;"></i>Delete
+                                                        </button>
+                                                    </form>
                                                 </div>
-                                                <% } %>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <% } %>
                             </div>
                         </div>
                     </div>
-                    <%  } %>
+
+                    <% } %>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <!-- Add Folder Modal -->
+    <div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/folders/create" method="POST" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFolderModalLabel">Create New Folder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="name" class="form-control" placeholder="Folder Name" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-
-
-    <script src="app.js"></script>
+    <script src="/app.js"></script>
 </body>
 
 </html>
