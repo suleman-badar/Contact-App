@@ -74,7 +74,7 @@ const createFakeContacts = async(count) => {
 
 const port = 8080;
 
-const MONGO_URL = process.env.MONGO_URL;
+// const MONGO_URL = process.env.MONGO_URL;
 
 main().then(async() => {
     console.log("Main Connection Successsful");
@@ -89,7 +89,7 @@ main().then(async() => {
 });
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect('mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/?retryWrites=true&w=majority&appName=Contacts');
 };
 
 app.get("/", (req, res) => {
