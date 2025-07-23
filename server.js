@@ -89,7 +89,9 @@ main().then(async() => {
 });
 
 async function main() {
-    await mongoose.connect('mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/contactsDB?retryWrites=true&w=majority&appName=Contacts');
+    await mongoose.connect('mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/contactsDB?retryWrites=true&w=majority&appName=Contacts')
+        .then(() => console.log("✅ MongoDB connected"))
+        .catch(err => console.error("❌ MongoDB error:", err));
 };
 
 app.get("/", (req, res) => {
@@ -227,7 +229,9 @@ app.delete("/folders/delete/:folderId", async(req, res) => {
 
 
 app.get("/login", (req, res) => {
+    console.log("login");
     res.render("login.ejs");
+
 });
 
 app.get("/register", (req, res) => {
@@ -379,12 +383,16 @@ app.delete("/home/delete-mul", async(req, res) => {
 //sending login details to database
 app.post("/register", upload.single("photo"), async(req, res) => {
     try {
+        console.log("➡️ Registration request received:");
+        console.log("📦 Form Data:", req.body);
         const { name, email, photo, password, confirmPass } = req.body;
         if (password != confirmPass) {
             return res.send("Passwords do not match.");
         }
-        let photoPath = req.file ? `/uploads/${req.file.filename}` : "";
+        // let photoPath = req.file ? `/uploads/${req.file.filename}` : "";
+        const photoPath = "";
 
+        console.log("📸 Photo path:", photoPath);
         const user = new User({
             name,
             photo: photoPath,
@@ -392,6 +400,8 @@ app.post("/register", upload.single("photo"), async(req, res) => {
             password
         });
         await user.save();
+        console.log("✅ User saved:", user);
+
         res.redirect("/login");
     } catch (err) {
         res.status(500).send("❌ Error registering user: " + err.message);
