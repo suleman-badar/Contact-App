@@ -378,8 +378,6 @@ app.delete("/home/delete-mul", async(req, res) => {
 });
 
 
-
-
 //sending login details to database
 app.post("/register", upload.single("photo"), async(req, res) => {
     try {
@@ -389,8 +387,7 @@ app.post("/register", upload.single("photo"), async(req, res) => {
         if (password != confirmPass) {
             return res.send("Passwords do not match.");
         }
-        // let photoPath = req.file ? `/uploads/${req.file.filename}` : "";
-        const photoPath = "";
+        let photoPath = req.file ? `/uploads/${req.file.filename}` : "";
 
         console.log("📸 Photo path:", photoPath);
         const user = new User({
