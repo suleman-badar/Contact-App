@@ -23,13 +23,23 @@
 
                     <div class="col-md-6">
                         <label for="phoneNumber" class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="number" value="<%= contact.number %>" required>
+                        <input type="number" class="form-control" id="phoneNumber" name="number" value="<%= contact.number %>" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<%= contact.email %>" required>
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            value="<%= contact.email %>"
+                            pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|yahoo\.com)$"
+                            title="Only Gmail, Hotmail, or Yahoo emails allowed"
+                            required
+                        >
                     </div>
+
 
                     <div class="col-md-6">
                         <label for="photo" class="form-label">Change Image</label>
