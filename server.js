@@ -61,7 +61,7 @@ const createFakeContacts = async(count) => {
 };
 
 
-const port = 8080;
+const port = 8080 || process.env.PORT;
 
 // const MONGO_URL = process.env.MONGO_URL;
 
