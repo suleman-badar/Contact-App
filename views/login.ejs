@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/Assets/logo.png">
     <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/login-style.css">
 </head>
 
@@ -14,13 +15,26 @@
         <h2>Login</h2>
         <form action="/login" method="POST">
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
-            </div>
+            <label for="email">Email</label>
+            <input type="email" name="email" placeholder="Enter your email" value="<%= typeof email !== 'undefined' ? email : '' %>" required>
+            <% if (emailError) { %>
+                <p style="color: red; font-size: 0.9em;"><%= emailError %></p>
+            <% } %>
+        </div>
+
+        <div class="form-group" style="position: relative;">
+            <label for="password">Password</label>
+            <input type="password" id="login-password" name="password" placeholder="Enter your password" required />
+
+            <i class="fa-solid fa-eye toggle-password" 
+            onclick="togglePassword(this, 'login-password')" 
+            style="position: absolute; top: 38px; right: 10px; cursor: pointer;"></i>
+
+            <% if (passwordError) { %>
+                <p style="color: red; font-size: 0.9em;"><%= passwordError %></p>
+            <% } %>
+        </div>
+
 
             <button type="submit" class="login-btn">Login</button>
 
@@ -29,6 +43,17 @@
             </div>
         </form>
     </div>
+    <script>
+    function togglePassword(icon, fieldId) {
+        const input = document.getElementById(fieldId);
+        const isVisible = input.type === "text";
+
+        input.type = isVisible ? "password" : "text";
+
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+    }
+    </script>
 </body>
 
 </html>

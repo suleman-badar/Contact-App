@@ -35,6 +35,7 @@
                             class="form-control"
                             id="email"
                             name="email"
+                            placeholder="Enter email"
                             value="<%= contact.email %>"
                             pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|yahoo\.com)$"
                             title="Only Gmail, Hotmail, or Yahoo emails allowed"
@@ -93,6 +94,28 @@
             </form>
         </div>
     </div>
+    <script>
+        const emailInput = document.getElementById("email");
+
+        emailInput.addEventListener("input", function () {
+            const allowedDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"];
+            const emailValue = emailInput.value.trim();
+            const domain = emailValue.split("@")[1];
+
+            // remove any existing warning
+            const oldWarning = document.getElementById("email-warning");
+            if (oldWarning) oldWarning.remove();
+
+            if (domain && !allowedDomains.includes(domain)) {
+                const warning = document.createElement("p");
+                warning.textContent = "Only Gmail, Yahoo, Hotmail, and Outlook emails are accepted.";
+                warning.style.color = "red";
+                warning.style.fontSize = "0.9em";
+                warning.id = "email-warning";
+                emailInput.insertAdjacentElement("afterend", warning);
+            }
+        });
+    </script
 </body>
 
 </html>

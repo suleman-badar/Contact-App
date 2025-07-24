@@ -9,6 +9,7 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: true,
+        unique: true, // ab unique hongi sab
     },
     password: {
         type: String,
@@ -18,4 +19,5 @@ const userSchema = new Schema({
 
 
 const User = mongoose.model("User", userSchema);
+User.init(); // this ensures indexes (like `unique: true`) 
 module.exports = User;

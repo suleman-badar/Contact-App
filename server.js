@@ -83,6 +83,8 @@ async function main() {
     await mongoose.connect("mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/contactsDB?retryWrites=true&w=majority&appName=Contacts")
         .then(() => console.log("✅ MongoDB connected"))
         .catch(err => console.error("❌ MongoDB error:", err));
+    
+    console.log("Server started at: http://localhost:" + port);
 };
 
 app.get("/", (req, res) => {
@@ -220,11 +222,20 @@ app.delete("/folders/delete/:folderId", async(req, res) => {
 
 
 app.get("/login", (req, res) => {
-    res.render("login.ejs");
+    res.render("login", {
+        email: "",
+        emailError: null,
+        passwordError: null,
+        generalError: null  
+    });
 });
 
 app.get("/register", (req, res) => {
-    res.render("register.ejs");
+    res.render("register", {
+        error: '',
+        email: '',
+        name: ''
+    });
 });
 
 app.get("/about", (req, res) => {
@@ -370,45 +381,82 @@ app.delete("/home/delete-mul", async(req, res) => {
 
 
 //sending login details to database
-app.post("/register", upload.single("photo"), async(req, res) => {
-    try {;
-        const { name, email, photo, password, confirmPass } = req.body;
-        if (password != confirmPass) {
-            return res.send("Passwords do not match.");
-        }
-        let photoPath = req.file ? req.file.path : "";
+app.post("/register", upload.single("photo"), async (req, res) => {
+    try {
+        const { name, email, password, confirmPass } = req.body;
 
-        console.log("📸 Photo path:", photoPath);
+        if (password !== confirmPass) {
+            return res.status(400).render("register", {
+                error: "❌ Passwords do not match.",
+                email,
+                name,
+            });
+        }
+
+        if (password.length < 8) {
+            return res.render("register", {
+                error: "Password must be at least 8 characters long",
+                email,
+                name
+            });
+        }
+
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).render("register", {
+                error: "⚠️ A user with this email already exists.",
+                email,
+                name,
+            });
+        }
+
+        const photoPath = req.file ? req.file.path : "";
+
         const user = new User({
             name,
             photo: photoPath,
             email,
-            password
+            password,
         });
         await user.save();
-        console.log("✅ User saved:", user);
-
         res.redirect("/login");
     } catch (err) {
-        res.status(500).send("❌ Error registering user: " + err.message);
+        res.status(500).render("register", {
+            error: "❌ Something went wrong. Try again later.",
+        });
     }
 });
 
+
 //checking user credentials to let them login
 
-app.post("/login", async(req, res) => {
+app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
+
         if (!user) {
-            return res.send("❌ User not found.");
+            return res.render("login", {
+                email,
+                emailError: "❌ User not found.",
+                passwordError: undefined
+            });
         }
-        if (user.password != password) {
-            return res.send("❌ Incorrect Password.");
+
+        if (user.password !== password) {
+            return res.render("login", {
+                email,
+                emailError: undefined,
+                passwordError: "❌ Incorrect password."
+            });
         }
+
         req.session.userId = user._id;
-        res.redirect("/home");
+        return res.redirect("/home");
+
     } catch (err) {
-        res.status(500).send("Server error: " + err.message);
+        console.error(err);
+        return res.status(500).send("Server error: " + err.message);
     }
 });
