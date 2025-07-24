@@ -10,6 +10,9 @@ const session = require("express-session");
 // const { faker } = require("@faker-js/faker");
 // const { name } = require("ejs");
 const methodOverride = require('method-override');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const upload = multer({ storage });
 
@@ -80,7 +83,7 @@ main().then(async() => {
 // mongoose.connect=
 
 async function main() {
-    await mongoose.connect("mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/contactsDB?retryWrites=true&w=majority&appName=Contacts")
+    await mongoose.connect(process.env.MONGO_URI)
         .then(() => console.log("✅ MongoDB connected"))
         .catch(err => console.error("❌ MongoDB error:", err));
     
