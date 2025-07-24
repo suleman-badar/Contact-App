@@ -11,12 +11,13 @@
     "description": "",
     "dependencies": {
         "@faker-js/faker": "^9.9.0",
+        "cloudinary": "^1.41.3",
         "ejs": "^3.1.10",
         "express": "^5.1.0",
         "express-session": "^1.18.1",
         "method-override": "^3.0.0",
         "mongoose": "^8.16.3",
         "multer": "^2.0.2",
-        "nodemon": "^3.1.10"
+        "multer-storage-cloudinary": "^4.0.0"
     }
 }

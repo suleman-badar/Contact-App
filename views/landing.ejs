@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact Manager</title>
+    <link rel="icon" type="image/png" href="/Assets/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="/landing-style.css" />
 </head>
@@ -13,9 +14,14 @@
     <header class="navbar">
         <div class="logo">📇 ContactManager</div>
         <nav class="nav-links">
-            <a href="/features">Features</a>
-            <a href="/about">About</a>
-            <a href="/login">Login</a>
+            <input type="checkbox" id="menu-toggle" />
+            <label for="menu-toggle" class="menu-icon"><i class="fas fa-bars"></i></label>
+
+            <div class="menu">
+                <a href="/features">Features</a>
+                <a href="/about">About</a>
+                <a href="/login">Login</a>
+            </div>
         </nav>
     </header>
 
@@ -26,14 +32,13 @@
             <a href="/login" class="btn-primary">Get Started</a>
         </div>
         <div class="hero-image">
-            <i class="fas fa-address-book fa-10x"></i>
+            <i class="fas fa-address-book fa-8x"></i>
         </div>
     </section>
 
     <footer class="footer">
         <p>Made with ❤️ by Suleman Badar &copy; 2025</p>
     </footer>
-
 </body>
 
 </html>
