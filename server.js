@@ -77,10 +77,10 @@ main().then(async() => {
     console.log(err)
 });
 
-// mongoose.connect=mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/contactsDB?retryWrites=true&w=majority&appName=Contacts
+// mongoose.connect=
 
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/contactsDB")
+    await mongoose.connect("mongodb+srv://sulemanbadarbutt:3rpNb8ulmyxJ6Uv9@contacts.b1uuy2r.mongodb.net/contactsDB?retryWrites=true&w=majority&appName=Contacts")
         .then(() => console.log("✅ MongoDB connected"))
         .catch(err => console.error("❌ MongoDB error:", err));
 };
@@ -221,7 +221,6 @@ app.delete("/folders/delete/:folderId", async(req, res) => {
 
 app.get("/login", (req, res) => {
     res.render("login.ejs");
-
 });
 
 app.get("/register", (req, res) => {
