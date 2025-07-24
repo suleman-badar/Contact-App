@@ -5,20 +5,17 @@ const Contact = require("./models/contact.js");
 const User = require("./models/user.js");
 const Folder = require("./models/folder.js");
 const multer = require("multer");
+const { storage } = require("./cloudinaryConfig");
 const session = require("express-session");
-const { faker } = require("@faker-js/faker")
-
-
-
+const { faker } = require("@faker-js/faker");
+// const { name } = require("ejs");
 const methodOverride = require('method-override');
-const { name } = require("ejs");
 
 
 let app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 
 app.use(express.urlencoded({
@@ -29,20 +26,11 @@ app.use(express.urlencoded({
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(session({
-    secret: 'secret-key', // use a secure secret in production
+    secret: 'MNB02M524', // use a secure secret in production
     resave: false,
     saveUninitialized: false
 }));
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './public/uploads'); // saves to public/uploads/
-    },
-    filename: function(req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + '-' + file.originalname);
-    }
-});
-const upload = multer({ storage: storage });
+
 
 
 const fakeUserId = '687a25b75f659c85dadadc25';
@@ -261,7 +249,8 @@ app.post("/home/add-contact", upload.single('photo'), async(req, res) => {
         if (!req.session.userId) return res.status(403).send("Login required");
         const { name, number, email, photo, address, bday, relation, gender, city, country } = req.body;
 
-        let photoPath = req.file ? `/uploads/${req.file.filename}` : '';
+        let photoPath = req.file ? req.file.path : '';
+
         let newContact = new Contact({
             name,
             number,
@@ -332,7 +321,8 @@ app.put("/home/edit/:id", upload.single("photo"), async(req, res) => {
             city,
             country
         } = req.body;
-        let photoPath = req.file ? `/uploads/${req.file.filename}` : contact.photo;
+        let photoPath = req.file ? req.file.path : contact.photo;
+
         await Contact.findByIdAndUpdate(req.params.id, {
             name,
             number,
@@ -372,7 +362,7 @@ app.delete("/home/delete-mul", async(req, res) => {
         await Contact.deleteMany({ _id: { $in: contactIds } });
         res.redirect("/home");
     } catch (err) {
-        rconsole.error("Failed to delete contacts:", err);
+        console.error("Failed to delete contacts:", err);
         res.status(500).send("Error deleting contacts.");
     }
 });
@@ -380,14 +370,12 @@ app.delete("/home/delete-mul", async(req, res) => {
 
 //sending login details to database
 app.post("/register", upload.single("photo"), async(req, res) => {
-    try {
-        console.log("➡️ Registration request received:");
-        console.log("📦 Form Data:", req.body);
+    try {;
         const { name, email, photo, password, confirmPass } = req.body;
         if (password != confirmPass) {
             return res.send("Passwords do not match.");
         }
-        let photoPath = req.file ? `/uploads/${req.file.filename}` : "";
+        let photoPath = req.file ? req.file.path : "";
 
         console.log("📸 Photo path:", photoPath);
         const user = new User({
@@ -407,7 +395,7 @@ app.post("/register", upload.single("photo"), async(req, res) => {
 
 //checking user credentials to let them login
 
-app.put("/login", async(req, res) => {
+app.post("/login", async(req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
