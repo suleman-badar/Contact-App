@@ -7,7 +7,7 @@ const Folder = require("./models/folder.js");
 const multer = require("multer");
 const { storage } = require("./cloudinaryConfig");
 const session = require("express-session");
-const { faker } = require("@faker-js/faker");
+// const { faker } = require("@faker-js/faker");
 // const { name } = require("ejs");
 const methodOverride = require('method-override');
 
@@ -34,31 +34,31 @@ app.use(session({
 
 
 
-const fakeUserId = '687a25b75f659c85dadadc25';
+// const fakeUserId = '687a25b75f659c85dadadc25';
 
 
-const createFakeContacts = async(count) => {
-    const contacts = [];
+// const createFakeContacts = async(count) => {
+//     const contacts = [];
 
-    for (let i = 0; i < count; i++) {
-        contacts.push({
-            name: faker.person.fullName(),
-            number: faker.phone.number('+92 3## #######'),
-            email: faker.internet.email(),
-            address: faker.location.streetAddress(),
-            bday: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
-            relation: faker.word.adjective(),
-            gender: faker.helpers.arrayElement(['Male', 'Female', 'Other']),
-            city: faker.location.city(),
-            country: faker.location.country(),
-            photo: faker.image.avatar(),
-            userId: fakeUserId,
-        });
-    }
+//     for (let i = 0; i < count; i++) {
+//         contacts.push({
+//             name: faker.person.fullName(),
+//             number: faker.phone.number('+92 3## #######'),
+//             email: faker.internet.email(),
+//             address: faker.location.streetAddress(),
+//             bday: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
+//             relation: faker.word.adjective(),
+//             gender: faker.helpers.arrayElement(['Male', 'Female', 'Other']),
+//             city: faker.location.city(),
+//             country: faker.location.country(),
+//             photo: faker.image.avatar(),
+//             userId: fakeUserId,
+//         });
+//     }
 
-    await Contact.insertMany(contacts);
-    console.log(`${count} fake contacts added!`);
-};
+//     await Contact.insertMany(contacts);
+//     console.log(`${count} fake contacts added!`);
+// };
 
 
 const port = 8080 || process.env.PORT;
@@ -67,7 +67,7 @@ const port = 8080 || process.env.PORT;
 
 main().then(async() => {
     console.log("Main Connection Successsful");
-    await createFakeContacts(5);
+    // await createFakeContacts(5);
 
     app.listen(port, () => {
         console.log("working");
