@@ -408,7 +408,7 @@ app.post("/register", upload.single("photo"), async (req, res) => {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).render("register", {
-                error: "⚠️ A user with this email already exists.",
+                error: "⚠ A user with this email already exists.",
                 email,
                 name,
             });
@@ -425,12 +425,14 @@ app.post("/register", upload.single("photo"), async (req, res) => {
         await user.save();
         res.redirect("/login");
     } catch (err) {
+    console.error("Registration error:", err);
         res.status(500).render("register", {
             error: "❌ Something went wrong. Try again later.",
+            email: req.body.email || '',
+            name: req.body.name || ''
         });
-    }
+}
 });
-
 
 //checking user credentials to let them login
 
