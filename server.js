@@ -11,6 +11,7 @@ const { faker } = require("@faker-js/faker");
 // const { name } = require("ejs");
 const methodOverride = require('method-override');
 
+const upload = multer({ storage });
 
 let app = express();
 app.set("view engine", "ejs");
