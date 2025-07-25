@@ -1,16 +1,14 @@
 const express = require("express");
 const path = require("path");
+const methodOverride = require('method-override');
+const multer = require("multer");
+const dotenv = require("dotenv");
+const session = require("express-session");
+const { storage } = require("./cloudinaryConfig");
 const mongoose = require("mongoose");
 const Contact = require("./models/contact.js");
 const User = require("./models/user.js");
 const Folder = require("./models/folder.js");
-const multer = require("multer");
-const { storage } = require("./cloudinaryConfig");
-const session = require("express-session");
-// const { faker } = require("@faker-js/faker");
-// const { name } = require("ejs");
-const methodOverride = require('method-override');
-const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -20,15 +18,14 @@ let app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(methodOverride('_method'));
+app.use(express.json());
 
 app.use(express.urlencoded({
     extended: true,
     limit: '10mb', // increase payload size
     parameterLimit: 10000 // increase number of parameters allowed
 }));
-app.use(express.json());
-app.use(methodOverride('_method'));
 app.use(session({
     secret: 'MNB02M524', // use a secure secret in production
     resave: false,
@@ -36,32 +33,6 @@ app.use(session({
 }));
 
 
-
-// const fakeUserId = '687a25b75f659c85dadadc25';
-
-
-// const createFakeContacts = async(count) => {
-//     const contacts = [];
-
-//     for (let i = 0; i < count; i++) {
-//         contacts.push({
-//             name: faker.person.fullName(),
-//             number: faker.phone.number('+92 3## #######'),
-//             email: faker.internet.email(),
-//             address: faker.location.streetAddress(),
-//             bday: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
-//             relation: faker.word.adjective(),
-//             gender: faker.helpers.arrayElement(['Male', 'Female', 'Other']),
-//             city: faker.location.city(),
-//             country: faker.location.country(),
-//             photo: faker.image.avatar(),
-//             userId: fakeUserId,
-//         });
-//     }
-
-//     await Contact.insertMany(contacts);
-//     console.log(`${count} fake contacts added!`);
-// };
 
 
 const port = 8080 || process.env.PORT;
@@ -77,16 +48,17 @@ main().then(async() => {
     });
 
 }).catch((err) => {
-    console.log(err)
+    console.log("Connection issue");
+    console.log(err);
 });
 
-// mongoose.connect=
+// mongoose.connect=process.env.MONGO_URI
 
 async function main() {
-    await mongoose.connect(process.env.MONGO_URI)
+    await mongoose.connect('mongodb://localhost:27017/contactsDB')
         .then(() => console.log("✅ MongoDB connected"))
         .catch(err => console.error("❌ MongoDB error:", err));
-    
+
     console.log("Server started at: http://localhost:" + port);
 };
 
@@ -229,7 +201,7 @@ app.get("/login", (req, res) => {
         email: "",
         emailError: null,
         passwordError: null,
-        generalError: null  
+        generalError: null
     });
 });
 
@@ -356,9 +328,10 @@ app.put("/home/edit/:id", upload.single("photo"), async(req, res) => {
     }
 });
 
-//delete request
+//delete contact 
 app.delete("/home/delete/:id", async(req, res) => {
     try {
+        console.log("Deleteting", req.params.id);
         await Contact.findByIdAndDelete(req.params.id);
         res.redirect("/home");
     } catch (err) {
@@ -384,7 +357,7 @@ app.delete("/home/delete-mul", async(req, res) => {
 
 
 //sending login details to database
-app.post("/register", upload.single("photo"), async (req, res) => {
+app.post("/register", upload.single("photo"), async(req, res) => {
     try {
         const { name, email, password, confirmPass } = req.body;
 
@@ -425,18 +398,18 @@ app.post("/register", upload.single("photo"), async (req, res) => {
         await user.save();
         res.redirect("/login");
     } catch (err) {
-    console.error("Registration error:", err);
+        console.error("Registration error:", err);
         res.status(500).render("register", {
             error: "❌ Something went wrong. Try again later.",
             email: req.body.email || '',
             name: req.body.name || ''
         });
-}
+    }
 });
 
 //checking user credentials to let them login
 
-app.post("/login", async (req, res) => {
+app.post("/login", async(req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });

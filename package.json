@@ -10,7 +10,6 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "@faker-js/faker": "^9.9.0",
         "cloudinary": "^1.41.3",
         "dotenv": "^17.2.1",
         "ejs": "^3.1.10",
