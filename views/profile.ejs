@@ -28,15 +28,13 @@
                         <p><i class="fa fa-envelope text-blue me-2"></i>
                             <%= user.email %>
                         </p>
-                        <p><i class="fa fa-user text-blue me-2"></i>
-                            <%= user.username || 'Not set' %>
-                        </p>
                         <p><i class="fa fa-calendar text-blue me-2"></i> Joined on
                             <%= user.createdAt ? user.createdAt.toDateString() : 'Date not available' %>
                         </p>
                         <div class="mt-4">
                             <a href="/home" class="btn btn-outline-primary me-2">Back to Contacts</a>
-                            <a href="/logout" class="btn btn-danger">Logout</a>
+                            <a href="/" class="btn btn-danger">Logout</a>
+                            <a href="/edit-profile" class="btn btn-warning">Edit Profile</a>
                         </div>
                     </div>
                 </div>
