@@ -81,7 +81,7 @@ main().then(async() => {
 });
 
 // mongoose.connect=
-
+console.log("MONGO_URI:", process.env.MONGO_URI);
 async function main() {
     await mongoose.connect(process.env.MONGO_URI)
         .then(() => console.log("✅ MongoDB connected"))
@@ -227,9 +227,9 @@ app.delete("/folders/delete/:folderId", async(req, res) => {
 app.get("/login", (req, res) => {
     res.render("login", {
         email: "",
-        emailError: null,
-        passwordError: null,
-        generalError: null  
+        emailError: '',
+        passwordError: '',
+        generalError: ''  
     });
 });
 
@@ -463,5 +463,72 @@ app.post("/login", async (req, res) => {
     } catch (err) {
         console.error(err);
         return res.status(500).send("Server error: " + err.message);
+    }
+});
+
+
+app.get("/edit-profile", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        if (!userId) return res.redirect("/login");
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).send("User not found");
+
+        res.render("edit-profile", { 
+            user,
+            error: null
+        });
+    } catch (err) {
+        console.error("Error loading edit profile page:", err);
+        res.status(500).send("Error loading edit profile page.");
+    }
+});
+
+app.post("/edit-profile", upload.single("photo"), async (req, res) => {
+    const { name, email, password, confirmPass } = req.body;
+    const user = await User.findById(req.session.userId);
+
+    if (!user) {
+        return res.redirect("/login");
+    }
+
+    user.name = name;
+
+    if (email && email !== user.email) {
+        user.email = email;
+    }
+
+    if (password || confirmPass) {
+        if (password !== confirmPass) {
+            return res.render("edit-profile", {
+                user,
+                error: "Passwords do not match",
+            });
+        }
+        user.password = password; 
+    }
+
+    if (req.file) {
+        user.photo = req.file.path;
+    }
+
+    await user.save();
+
+    res.redirect("/profile");
+});
+
+
+
+
+app.get("/profile", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        if (!userId) return res.redirect("/login");
+
+        const user = await User.findById(userId);
+        res.render("profile", { user });
+    } catch (err) {
+        res.status(500).send("Error loading profile");
     }
 });

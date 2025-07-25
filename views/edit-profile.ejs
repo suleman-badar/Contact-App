@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/profile-style.css" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <h2 class="mb-4">Edit Profile</h2>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+
+
+            <form action="/edit-profile" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" name="name" id="name" class="form-control" value="<%= user.name %>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" name="email" id="email" class="form-control" value="<%= user.email %>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Profile Photo</label>
+                    <input type="file" name="photo" id="photo" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">New Password</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Leave blank to keep current password">
+                </div>
+
+                <div class="mb-3">
+                    <label for="confirmPass" class="form-label">Confirm New Password</label>
+                    <input type="password" name="confirmPass" id="confirmPass" class="form-control" placeholder="Confirm new password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+                <a href="/profile" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
