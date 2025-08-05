@@ -1,19 +1,54 @@
+/* About Page Styling */
+
+[data-bs-theme="light"] #head {
+    background-color: #eeeeee;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+#head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+[data-bs-theme="dark"] .user-icon {
+    color: white;
+}
+
+[data-bs-theme="light"] .user-icon {
+    color: black;
+    border-color: black;
+}
+
+[data-bs-theme="light"] .user-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: black;
+    border-color: black;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00aaff;
+}
+
 body {
-    background-color: pink;
-    color: #fff;
+    height: 100vh;
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    padding: 2rem;
-    line-height: 1.6;
 }
 
 .about-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #111;
-    padding: 2rem;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.2);
+    width: 100%;
 }
 
 h1 {
@@ -44,7 +79,7 @@ h2 {
 
 .back-link {
     display: inline-block;
-    margin-top: 2rem;
+    margin: 1rem;
     color: #66ccff;
     text-decoration: none;
     font-size: 1rem;

@@ -37,7 +37,7 @@ app.use(express.urlencoded({
     parameterLimit: 10000 // increase number of parameters allowed
 }));
 app.use(session({
-    secret: process.env.EXPRESS_SESSION_SECRET, // use a secure secret in production
+    secret: process.env.EXPRESS_SESSION_SECRET || 'mysecret', // use a secure secret in production
     resave: false,
     saveUninitialized: true,
     cookie: {
