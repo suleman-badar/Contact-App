@@ -1,121 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("/layouts/boilerplate.ejs") %>
 
-<head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/Assets/logo.png">
+    <main class="container my-4">
+        <div class="contact-details-container rounded-4 p-4 mx-auto">
+            <h2 class="text-center mb-4 text-primary">Edit Contact</h2>
 
-    <title>Edit Contact</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/edit-style.css" />
-</head>
+            <div class="form-box rounded">
+                <form action="/home/edit/<%= contact._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= contact.name %>" required>
+                            <div class="invalid-feedback">Name is required.</div>
+                        </div>
 
-<body>
-    <div class="container mt-5">
-        <h2 class="form-title text-center mb-4">Edit Contact</h2>
-        <div class="form-box p-4 rounded shadow">
-            <form action="/home/edit/<%= contact._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
-                <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phoneNumber" name="number" value="<%= contact.number %>" required pattern="^\d{7,15}$" title="Phone number must be 7 to 15 digits">
+                            <div class="invalid-feedback">Valid phone number is required.</div>
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="name" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="<%= contact.name %>" required>
-                    </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<%= contact.email %>" required>
+                            <div class="invalid-feedback">Please provide a valid email (Gmail, Yahoo, Hotmail, Outlook).</div>
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="phoneNumber" class="form-label">Phone Number</label>
-                        <input type="number" class="form-control" id="phoneNumber" name="number" value="<%= contact.number %>" required>
-                    </div>
+                        <div class="col-md-6">
+                            <label for="photo" class="form-label">Change Image</label>
+                            <input type="file" class="form-control mb-2" id="photo" name="photo" accept="image/*">
+                            <% if (contact.photo) { %>
+                                <img src="<%= contact.photo %>" alt="Current Photo" class="image-preview mt-1">
+                                <% } %>
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input
-                            type="email"
-                            class="form-control"
-                            id="email"
-                            name="email"
-                            placeholder="Enter email"
-                            value="<%= contact.email %>"
-                            pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|yahoo\.com)$"
-                            title="Only Gmail, Hotmail, or Yahoo emails allowed"
-                            required
-                        >
-                    </div>
+                        <div class="col-md-6">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" value="<%= contact.address %>">
+                        </div>
 
+                        <div class="col-md-6">
+                            <label for="bday" class="form-label">Birthday</label>
+                            <input type="date" class="form-control" id="bday" name="bday" value="<%= contact.bday %>">
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="photo" class="form-label">Change Image</label>
-                        <input type="file" class="form-control mb-2" id="photo" name="photo" accept="image/*">
-                        <% if (contact.photo) { %>
-                            <img src="<%= contact.photo %>" alt="Current Photo" class="image-preview mt-1">
-                            <% } %>
-                    </div>
+                        <div class="col-md-6">
+                            <label for="relation" class="form-label">Relation</label>
+                            <input type="text" class="form-control" id="relation" name="relation" value="<%= contact.relation %>">
+                        </div>
 
-                    <div class="col-md-6">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" value="<%= contact.address %>">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="bday" class="form-label">Birthday</label>
-                        <input type="date" class="form-control" id="bday" name="bday" value="<%= contact.bday %>">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="relation" class="form-label">Relation</label>
-                        <input type="text" class="form-control" id="relation" name="relation" value="<%= contact.relation %>">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="gender" class="form-label">Gender</label>
-                        <select class="form-select" id="gender" name="gender">
+                        <div class="col-md-6">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                            <option value="" disabled selected>Select gender</option>
                             <option value="Male" <%= contact.gender === 'Male' ? 'selected' : '' %>>Male</option>
                             <option value="Female" <%= contact.gender === 'Female' ? 'selected' : '' %>>Female</option>
                             <option value="Other" <%= contact.gender === 'Other' ? 'selected' : '' %>>Other</option>
                         </select>
+                            <div class="invalid-feedback">Please select a gender.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" name="city" value="<%= contact.city %>">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control" id="country" name="country" value="<%= contact.country %>">
+                        </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="city" class="form-label">City</label>
-                        <input type="text" class="form-control" id="city" name="city" value="<%= contact.city %>">
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="submit" class="btn btn-primary px-4">Update Contact</button>
+                        <a href="/home" class="btn btn-secondary ms-3">Cancel</a>
                     </div>
-
-                    <div class="col-md-6">
-                        <label for="country" class="form-label">Country</label>
-                        <input type="text" class="form-control" id="country" name="country" value="<%= contact.country %>">
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-center mt-4">
-                    <button type="submit" class="btn btn-primary px-4">Update Contact</button>
-                    <a href="/home" class="btn btn-secondary ms-3">Cancel</a>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-    <script>
-        const emailInput = document.getElementById("email");
+    </main>
 
-        emailInput.addEventListener("input", function () {
-            const allowedDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"];
-            const emailValue = emailInput.value.trim();
-            const domain = emailValue.split("@")[1];
-
-            // remove any existing warning
-            const oldWarning = document.getElementById("email-warning");
-            if (oldWarning) oldWarning.remove();
-
-            if (domain && !allowedDomains.includes(domain)) {
-                const warning = document.createElement("p");
-                warning.textContent = "Only Gmail, Yahoo, Hotmail, and Outlook emails are accepted.";
-                warning.style.color = "red";
-                warning.style.fontSize = "0.9em";
-                warning.id = "email-warning";
-                emailInput.insertAdjacentElement("afterend", warning);
-            }
-        });
-    </script
-</body>
-
-</html>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/edit-validations.js"></script>

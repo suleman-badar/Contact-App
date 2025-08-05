@@ -1,24 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("/layouts/boilerplate.ejs") %>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/Assets/logo.png">
 
-    <title>Add Contact</title>
-    <link rel="stylesheet" href="/add-contact-style.css" />
-</head>
-
-<body>
-
-    <div id="head">
-        <img src="/assets/logo.png" alt="Logo" id="logo" />
-        <h2 style="background-color: inherit;">Add New Contact</h2>
-    </div>
 
     <div class="form-container">
-        <form class="contact-form" method="POST" action="./add-contact" enctype="multipart/form-data">
+        <form class="contact-form" method="POST" action="/home/add-contact" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" placeholder="Enter name" required />
@@ -31,15 +16,7 @@
 
             <div class="form-group">
                 <label for="email">Email Address</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter email"
-                    required
-                    pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com)$" 
-                    title="Only Gmail, Yahoo, Hotmail, and Outlook email addresses are allowed."
-                />
+                <input type="email" id="email" name="email" placeholder="Enter email" required pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com)$" title="Only Gmail, Yahoo, Hotmail, and Outlook email addresses are allowed." />
 
             </div>
 
@@ -91,7 +68,7 @@
     <script>
         const emailInput = document.getElementById("email");
 
-        emailInput.addEventListener("input", function () {
+        emailInput.addEventListener("input", function() {
             const allowedDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"];
             const emailValue = emailInput.value.trim();
             const domain = emailValue.split("@")[1];
@@ -109,8 +86,4 @@
                 emailInput.insertAdjacentElement("afterend", warning);
             }
         });
-    </script
-
-</body>
-
-</html>
+    </script>

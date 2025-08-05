@@ -1,0 +1,69 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+    <div>
+        <div class="folders">
+            <div class="container my-5 folder-wrapper">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-primary">📁 My Folders</h2>
+
+                    <i class="fa-solid fa-folder-plus me-1" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#addFolderModal"> Create Folder</i>
+                </div>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <% for (let folder of allFolders) { %>
+                        <div class="col">
+                            <div class="card folder-card shadow">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">
+                                        <%= folder.name %>
+                                    </h5>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <form action="/folders/add-contacts/<%= folder._id %>" method="get">
+
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                <i class="fa-solid fa-pen-to-square me-1"></i>Add Contacts
+                                            </button>
+                                        </form>
+                                        <form action="/folders/<%= folder._id %>" method="get">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fa-solid fa-eye" style="background-color: inherit;"></i>View
+                                                        </button>
+                                        </form>
+
+                                        <form action="/folders/delete/<%= folder._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure?')">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="fa-solid fa-trash me-1" style="background-color: inherit;"></i>Delete
+                                                        </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="/folders/create" method="POST" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addFolderModalLabel">Create New Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="name" class="form-control" placeholder="Folder Name" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+
+        <!-- <div class="d-flex  align-items-center justify-content-end">
+        <button type="submit" class="btn btn-sm btn-primary">Add to Folder</button>
+    </div> -->

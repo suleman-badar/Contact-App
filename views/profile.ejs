@@ -1,25 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("/layouts/boilerplate.ejs") %>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/Assets/logo.png">
-
-    <title>User Profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/profile-style.css" />
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</head>
-
-<body>
     <div class="container mt-5">
         <div class="d-flex justify-content-center">
-            <div class="profile-card shadow-lg">
+            <div class="profile-card ">
                 <div class="row align-items-center g-4">
                     <div class="col-md-4 text-center">
-                        <img src="<%= user.photo %>" alt="User Photo" class="profile-img mb-3" />
+                        <img src="<%=user.photo && user.photo.trim() !== '' ? user.photo: '/Assets/default-user.png' %>" alt="User Photo" class="profile-img mb-3" />
                     </div>
                     <div class="col-md-8">
                         <h2 class="text-blue">
@@ -36,13 +22,10 @@
                         </p>
                         <div class="mt-4">
                             <a href="/home" class="btn btn-outline-primary me-2">Back to Contacts</a>
-                            <a href="/logout" class="btn btn-danger">Logout</a>
+                            <a href="/" class="btn btn-danger">Logout</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
-
-</html>

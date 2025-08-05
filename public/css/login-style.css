@@ -1,24 +1,62 @@
-body {
-    background-color: #000;
-    color: #fff;
+[data-bs-theme="light"] #head {
+    background-color: #eeeeee;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+#head {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+[data-bs-theme="dark"] .user-icon {
+    color: white;
+}
+
+[data-bs-theme="light"] .user-icon {
+    color: black;
+    border-color: black;
+}
+
+[data-bs-theme="light"] .user-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: black;
+    border-color: black;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00aaff;
+}
+
+body {
     height: 100vh;
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
 }
 
-.register-container {
-    background-color: #111;
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+}
+
+.login-container {
     padding: 2rem 2.5rem;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
-    width: 100%;
+    width: 70%;
     max-width: 400px;
 }
 
-.register-container h2 {
+.login-container h2 {
     color: #00aaff;
     text-align: center;
     margin-bottom: 1.5rem;
@@ -38,8 +76,6 @@ body {
     padding: 0.6rem;
     border-radius: 5px;
     border: 1px solid #00aaff;
-    background-color: #222;
-    color: white;
 }
 
 .form-group input:focus {
@@ -48,31 +84,30 @@ body {
     box-shadow: 0 0 5px #66ccff;
 }
 
-.register-btn {
+.login-btn {
     width: 100%;
     background-color: #00aaff;
     border: none;
-    color: white;
     padding: 0.7rem;
     font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
 }
 
-.register-btn:hover {
+.login-btn:hover {
     background-color: #007acc;
 }
 
-.login-link {
+.register-link {
     margin-top: 1rem;
     text-align: center;
 }
 
-.login-link a {
+.register-link a {
     color: #66ccff;
     text-decoration: none;
 }
 
-.login-link a:hover {
+.register-link a:hover {
     text-decoration: underline;
 }

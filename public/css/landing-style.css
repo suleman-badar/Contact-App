@@ -1,0 +1,116 @@
+/* THEME SUPPORT */
+
+[data-bs-theme="light"] .navbar {
+    background-color: #eeeeee;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+[data-bs-theme="dark"] .user-icon {
+    color: white;
+}
+
+[data-bs-theme="light"] .user-icon {
+    color: black;
+    border-color: black;
+}
+
+[data-bs-theme="light"] .user-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: black;
+    border-color: black;
+}
+
+
+/* BOOTSTRAP NAVBAR BASE */
+
+.navbar {
+    border-bottom: 1px solid #333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+/* BRAND STYLING */
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00aaff;
+}
+
+
+/* NAV LINKS OVERRIDE (OPTIONAL FOR STYLE) */
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #00aaff;
+}
+
+
+/* HERO SECTION */
+
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.hero-content {
+    flex: 1;
+    min-width: 280px;
+    margin-top: 4rem;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    color: #00aaff;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+}
+
+.hero-image {
+    flex: 1;
+    text-align: center;
+    min-width: 280px;
+    color: #00aaff;
+}
+
+
+/* FOOTER */
+
+.footer {
+    text-align: center;
+    padding: 1rem 2rem;
+    height: 3.7rem;
+    color: #888888;
+    margin-top: 4rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+[data-bs-theme="light"] .footer {
+    background-color: #eeeeee;
+}
+
+
+/* RESPONSIVE TWEAKS */
+
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    .hero-content p {
+        font-size: 1rem;
+    }
+}

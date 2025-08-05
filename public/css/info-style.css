@@ -1,46 +1,56 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    color: white;
-}
-
-body {
-    background-color: #121212;
+[data-bs-theme="light"] #head {
+    background-color: #eeeeee;
+    border-bottom: 1px solid #e2e2e2;
 }
 
 #head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #1e1e1e;
-    padding: 1rem 2rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    padding: 1rem 10rem;
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+    /* subtle header shadow */
 }
 
-#logo {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
+[data-bs-theme="dark"] .user-icon {
+    color: white;
 }
+
+[data-bs-theme="light"] .user-icon {
+    color: black;
+    border-color: black;
+}
+
+[data-bs-theme="light"] .user-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: black;
+    border-color: black;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00aaff;
+}
+
+
+/* Contact Container */
 
 .contact-details-container {
-    display: flex;
-    justify-content: center;
-    padding: 3rem 1rem;
+    max-width: 900px;
+    /* background-color: var(--bs-body-bg); */
+    border-radius: 59px;
+    box-shadow: 0 -8px 15px rgba(0, 123, 255, 0.2), 8px 8px 15px rgba(0, 123, 255, 0.2);
 }
 
 .contact-card {
     display: flex;
     flex-wrap: wrap;
-    background-color: #1e1e1e;
     padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #0d6efd;
+    /* box-shadow: 0 0 10px #0d6efd; */
     max-width: 900px;
     width: 100%;
     gap: 2rem;
@@ -59,19 +69,17 @@ body {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #0d6efd;
+    /* border: 2px solid #00aaff; */
 }
 
 .contact-name {
     font-size: 1.8rem;
     font-weight: bold;
-    color: white;
     text-align: center;
 }
 
 .contact-relation {
     font-size: 1rem;
-    color: #ccc;
     text-align: center;
 }
 
@@ -88,7 +96,6 @@ body {
     align-items: center;
     gap: 0.7rem;
     font-size: 1rem;
-    color: #ddd;
 }
 
 .info-row i {

@@ -1,15 +1,26 @@
-# 📇 Contact Manager Web App
+#  Contact Manager Web App
 
-A full-stack Contact Manager web application that allows users to securely add, view, edit, and delete their contacts. Each contact can include details like photo, phone number, email, address, birthday, gender, relation, city, and country.
+A full-stack Contact Management Web App built using Node.js, Express, MongoDB, and EJS. It allows users to manage personal contacts with features such as image uploads, contact grouping via folders, editing, deletion, and detailed views.
 
-## 🚀 Features
+##  Features
 
-- User registration and login with session-based authentication
-- Add, view, edit, and delete contacts
-- Upload contact photos
-- View detailed info for each contact
-- Fake data generation with Faker for testing
-- Responsive design using Bootstrap
+ Add, edit, and delete contacts
+
+ Create folders to organize contacts
+
+ Upload profile pictures (Cloudinary integration)
+
+ View individual contact details
+
+ Update contact information
+
+ Delete single or multiple contacts
+
+ Folder-based contact filtering
+
+ Full backend with Express & MongoDB
+
+
 
 ## 🛠 Tech Stack
 
@@ -17,7 +28,7 @@ A full-stack Contact Manager web application that allows users to securely add, 
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (via Mongoose)
 - **Other Tools**: 
-  - `multer` for photo upload
+  - `cloudinary` for photo upload
   - `express-session` for session management
   - `method-override` for supporting PUT/DELETE requests
   - `@faker-js/faker` for seeding fake contacts
@@ -34,14 +45,12 @@ A full-stack Contact Manager web application that allows users to securely add, 
 ├── server.js # Main server file
 ├── package.json
 ├── .gitignore
+├── cloudinaryConfig.js
+└── .env
 └── README.md
 
 
-## 📸 Screenshots
-
-_Add screenshots of your app here if desired (e.g., home page, add contact page, contact detail view)._
-
-## 🔧 Installation & Setup
+##  Installation & Setup
 
 ### 1. Clone the Repository
 
@@ -49,14 +58,14 @@ _Add screenshots of your app here if desired (e.g., home page, add contact page,
 git clone https://github.com/suleman-badar/Contact-App.git
 cd contact-App
 2. Install Dependencies
-``bash
-
 npm install
-3. Start MongoDB
-Make sure MongoDB is running locally. By default, it connects to:
 
-mongodb://127.0.0.1:27017/contactsDB
-If needed, update the connection string in server.js.
+3. Create a .env file in the root directory and add:
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+MONGODB_URI=your_mongodb_uri
+SESSION_SECRET=your_secret
 
 4. Run the App
 node server.js
@@ -64,22 +73,17 @@ node server.js
 Then open your browser and go to:
 http://localhost:8080
 
-🧪 Seeding Fake Data
-When the app starts, it automatically seeds 20 fake contacts using @faker-js/faker.
 
-
-✅ To Do / Improvements
+# To Do / Improvements
 Add OTP verification for user signup/login
 
-Add password hashing for better security
-
-Enable search and filter functionality
+Folder sharing or collaboration
 
 Implement pagination for large contact lists
 
-🧑‍💻 Author
+# Author
 Suleman Butt
 Built using the MERN stack (without React) for learning and portfolio building.
 
-📄 License
+# License
 This project is open-source and free to use.

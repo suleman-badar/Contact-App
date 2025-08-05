@@ -1,0 +1,92 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary bg-light py-3">
+    <div class="container-fluid">
+        <img src="/Assets/logo.png" alt="Some Logo" id="logo">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/folders">Folders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/features">Features</a>
+                </li>
+            </ul>
+            <%if(addToFolder){%>
+
+                <button class="btn btn-outline-primary d-none me-3 showBtn" type="submit" form="addToFolderForm">Add To Folder</button>
+
+                <%}else{%>
+
+                    <button type="submit" class="btn btn-danger d-none me-3 showBtn" form="deleteSelectedForm">
+                        <i class="fas fa-trash me-1"></i> Delete
+                    </button>
+                    <%}%>
+
+
+                        <form class="d-flex me-3" role="search" action="/home/search" method="GET">
+
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" />
+                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                        </form>
+                        <br>
+
+
+                        <ul class="navbar-nav mb-2 mb-lg-0">
+                            <!-- Theme Toggle as Nav Item -->
+                            <li class="nav-item d-lg-none">
+                                <button id="themeToggleMobile" class="btn btn-outline-secondary w-100 mb-2 user-icon">
+            <i class="fas fa-moon me-2 "></i> Toggle Theme
+        </button>
+                            </li>
+
+
+                            <!-- User Dropdown as Nav Item on Mobile -->
+                            <li class="nav-item dropdown d-lg-none">
+                                <a class="nav-link dropdown-toggle" href="/home/profile" role="button" data-bs-toggle="dropdown">
+            Account
+        </a>
+                                <ul class="dropdown-menu">
+
+
+                                    <li><a class="dropdown-item" href="/home/profile">Profile</a></li>
+
+                                    <li><a class="dropdown-item" href="/about">About</a></li>
+                                    <li><a class="dropdown-item" href="/features">Features</a></li>
+                                    <li><a class="dropdown-item" href="/">Log Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <!-- Desktop Only Icons -->
+                        <div class="d-none d-lg-flex align-items-center ms-3 gap-2">
+                            <button id="themeToggle" class="btn btn-outline-secondary d-flex align-items-center user-icon">
+        <i id="themeIcon" class="fas fa-moon me-2"></i>
+    </button>
+
+                            <div class="dropdown">
+                                <div class="dropdown-toggle user-icon-wrapper" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="<%= (user && user.photo && user.photo.trim() !== '' || null ) ? user.photo : '/Assets/default-user.png' %>" class="rounded-circle flex-shrink-0" width="40" height="40" alt="user photo" style="min-width: 40px; min-height: 40px;" />
+
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="/home/profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/about">About</a></li>
+                                    <li><a class="dropdown-item" href="/features">Features</a></li>
+                                    <li><a class="dropdown-item" href="/">Log Out</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+        </div>
+    </div>
+
+</nav>
