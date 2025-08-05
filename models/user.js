@@ -12,7 +12,11 @@ const userSchema = new Schema({
         required: true,
         unique: true, // ab unique hongi sab
     },
-});
+    dob: {
+        type: Date
+    },
+
+}, { timestamps: true });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 

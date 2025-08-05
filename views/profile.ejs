@@ -14,8 +14,8 @@
                         <p><i class="fa fa-envelope text-blue me-2"></i>
                             <%= user.email %>
                         </p>
-                        <p><i class="fa fa-user text-blue me-2"></i>
-                            <%= user.username || 'Not set' %>
+                        <p><i class="fa fa-birthday-cake text-blue me-2"></i>
+                            <%= user.dob ? user.dob.toDateString() : 'DOB not set' %>
                         </p>
                         <p><i class="fa fa-calendar text-blue me-2"></i> Joined on
                             <%= user.createdAt ? user.createdAt.toDateString() : 'Date not available' %>

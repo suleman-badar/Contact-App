@@ -10,44 +10,61 @@ const multer = require("multer");
 const upload = multer({ storage });
 
 router.get("/", (req, res) => {
-    const { name = '', email = '' } = req.session.formData || {};
+    const { name = '', email = '', dob = '' } = req.session.formData || {};
     req.session.formData = null;
 
     res.render("register", {
         name,
-        email
+        email,
+        dob,
+        error: null
     });
 });
 
+
 //sending login details to database
 router.post("/", upload.single("photo"), wrapAsync(async(req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, dob, confirmPass } = req.body;
 
-    req.session.formData = { name, email };
-    // if (!name || name.trim() === "") {
-    //     req.flash("error", "⚠ Name is required.");
-    //     return res.redirect("/register");
-    // }
-
-    // if (password.length < 8) {
-    //     req.flash("error", "Password must be at least 8 characters long.");
-    //     return res.redirect("/register");
-    // }
+    req.session.formData = { name, email, dob };
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         return res.status(400).render("register", {
             name,
             email,
+            dob,
             error: "A user with this email already exists.",
         });
     }
+    if (new Date(dob) > new Date()) {
+        return res.status(400).render("register", {
+            name,
+            email,
+            dob,
+            error: "Date of birth cannot be in the future."
+        });
+
+    }
+
+    if (password !== confirmPass) {
+        return res.status(400).render("register", {
+            name,
+            email,
+            dob,
+            error: "Passwords do not match.",
+        });
+    }
+
+
+
     const photoPath = req.file ? req.file.path : "";
 
     const user = new User({
         name,
         photo: photoPath,
         email,
+        dob // 👈 Store DOB
     });
 
     try {
@@ -59,10 +76,9 @@ router.post("/", upload.single("photo"), wrapAsync(async(req, res) => {
         return res.status(400).render("register", {
             name,
             email,
+            dob,
             error: err.message,
         });
     }
-
 }));
-
 module.exports = router;
