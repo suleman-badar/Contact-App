@@ -14,3 +14,4 @@ npm-debug.log*
 # system files
 .DS_Store
 Thumbs.db
+.env

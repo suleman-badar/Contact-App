@@ -37,7 +37,7 @@ app.use(express.urlencoded({
     parameterLimit: 10000 // increase number of parameters allowed
 }));
 app.use(session({
-    secret: 'MNB02M524', // use a secure secret in production
+    secret: process.env.EXPRESS_SESSION_SECRET, // use a secure secret in production
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -77,8 +77,8 @@ function isLoggedIn(req, res, next) {
     next();
 }
 
+const port = process.env.PORT || 8080;
 
-const port = 8080 || process.env.PORT;
 
 // const MONGO_URL = process.env.MONGO_URL;
 
@@ -94,10 +94,10 @@ main().then(async() => {
     console.log(err);
 });
 
-// mongoose.connect=process.env.MONGO_URI
+// mongoose.connect=
 
 async function main() {
-    await mongoose.connect('mongodb://localhost:27017/contactsDB')
+    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/contactsDB")
         .then(() => console.log("✅ MongoDB connected"))
         .catch(err => console.error("❌ MongoDB error:", err));
 
