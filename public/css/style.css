@@ -416,7 +416,7 @@ footer {
     height: 45px;
     width: 45px;
     object-fit: contain;
-    background-color: transparent;
+    /* background-color: transparent; */
     border-radius: 50%;
     /* border: 2px solid red; */
 }
@@ -443,7 +443,6 @@ footer {
 .form-group label {
     margin-bottom: 0.4rem;
     font-weight: bold;
-    color: white;
 }
 
 .form-group input,
@@ -451,23 +450,6 @@ footer {
     padding: 0.6rem;
     border: 1px solid #0d6efd;
     border-radius: 5px;
-}
-
-.add-contact-btn {
-    margin-top: 1.5rem;
-    padding: 0.75rem;
-    background-color: #0d6efd;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.add-contact-btn:hover {
-    background-color: #0a58ca;
-    transform: scale(1.02);
 }
 
 @media (max-width: 600px) {

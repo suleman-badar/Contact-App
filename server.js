@@ -9,14 +9,10 @@ const mongoose = require("mongoose");
 const User = require("./models/user.js");
 const passport = require("passport");
 const localStrategy = require("passport-local");
-
-
 const home = require("./routes/home.js");
 const login = require("./routes/login.js");
 const register = require("./routes/register.js");
 const folders = require("./routes/folder.js");
-
-
 dotenv.config();
 
 
@@ -37,7 +33,7 @@ app.use(express.urlencoded({
     parameterLimit: 10000 // increase number of parameters allowed
 }));
 app.use(session({
-    secret: process.env.EXPRESS_SESSION_SECRET || 'mysecret', // use a secure secret in production
+    secret: process.env.EXPRESS_SESSION_SECRET || 'mysecret',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -97,7 +93,7 @@ main().then(async() => {
 // mongoose.connect=
 
 async function main() {
-    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/contactsDB")
+    await mongoose.connect('mongodb://localhost:27017/contactsDB' || process.env.MONGO_URI)
         .then(() => console.log("✅ MongoDB connected"))
         .catch(err => console.error("❌ MongoDB error:", err));
 
@@ -115,7 +111,6 @@ app.get("/", (req, res) => {
     res.render("landing.ejs");
 });
 
-
 app.get("/about", (req, res) => {
     res.render("about.ejs", { addToFolder: false });
 });
@@ -124,5 +119,5 @@ app.get("/features", (req, res) => {
 });
 
 app.use((req, res) => {
-    res.send("page not found!");
+    res.render("404.ejs", { addToFolder: false });
 });
