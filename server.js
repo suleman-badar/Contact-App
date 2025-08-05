@@ -13,6 +13,8 @@ const home = require("./routes/home.js");
 const login = require("./routes/login.js");
 const register = require("./routes/register.js");
 const folders = require("./routes/folder.js");
+const profile = require("./routes/profile.js");
+
 dotenv.config();
 
 
@@ -105,6 +107,8 @@ app.use("/home", home);
 app.use("/register", register);
 app.use("/login", login);
 app.use("/folders", folders);
+app.use("/profile", profile);
+
 
 
 app.get("/", (req, res) => {

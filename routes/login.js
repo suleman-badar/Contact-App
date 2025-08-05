@@ -30,10 +30,8 @@ router.post("/", async(req, res, next) => {
         });
     }
 
-    // console.log("👉 User found, calling passport.authenticate...");
 
     passport.authenticate("local", (err, authenticatedUser, info) => {
-        // console.log("🧠 passport.authenticate callback executed");
 
         if (err) {
             console.error("❌ Passport error:", err);
@@ -41,7 +39,6 @@ router.post("/", async(req, res, next) => {
         }
 
         if (!authenticatedUser) {
-            console.warn("❌ Authentication failed:", info);
             return res.render("login", {
                 email,
                 emailError: null,
@@ -52,10 +49,8 @@ router.post("/", async(req, res, next) => {
 
         req.logIn(authenticatedUser, (err) => {
             if (err) {
-                console.error("❌ req.logIn failed:", err);
                 return next(err);
             }
-            // console.log("✅ Logged in:", authenticatedUser.email);
             res.redirect("/home");
         });
     })(req, res, next);

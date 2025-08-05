@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Contact = require("../models/contact.js");
-const User = require("../models/user.js");
-const Folder = require("../models/folder.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const { isLoggedIn } = require("../utils/middleware.js");
 
@@ -82,19 +80,7 @@ router.get("/edit/:id", isLoggedIn, wrapAsync(async(req, res) => {
 
 }));
 
-//rendering to profile of user
-router.get("/profile", isLoggedIn, wrapAsync(async(req, res) => {
 
-
-    const user = await User.findById(req.user._id); // Passport attaches the user to req.user
-
-    if (!user) {
-        req.flash("error", "User not found");
-        return res.redirect("/login");
-    }
-
-    res.render("profile.ejs", { user, addToFolder: false });
-}));
 
 
 

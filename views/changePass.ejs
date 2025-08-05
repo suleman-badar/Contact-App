@@ -1,0 +1,20 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+    <div class="container my-5">
+        <h2>Change Password</h2>
+        <form action="/profile/change-password" method="POST">
+            <div class="mb-3">
+                <label>Current Password</label>
+                <input type="password" name="oldPassword" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>New Password</label>
+                <input type="password" name="newPassword" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Confirm New Password</label>
+                <input type="password" name="confirmPassword" class="form-control" required>
+            </div>
+            <button class="btn btn-primary">Update Password</button>
+        </form>
+    </div>

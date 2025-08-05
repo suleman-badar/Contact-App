@@ -1,0 +1,50 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+    <div class="container my-5">
+        <h2>Edit Profile</h2>
+
+        <% if (error && error.length) { %>
+            <div class="alert alert-danger">
+                <%= error %>
+            </div>
+            <% } %>
+
+                <% if (success && success.length) { %>
+                    <div class="alert alert-success">
+                        <%= success %>
+                    </div>
+                    <% } %>
+
+                        <form class="needs-validation" novalidate action="/profile/edit" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" name="name" class="form-control" value="<%= user.name %>" required>
+                                <div class="invalid-feedback">Please enter your name.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" value="<%= user.email %>" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$">
+                                <div class="invalid-feedback">Please enter a valid email.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Current Password (for email change)</label>
+                                <input type="password" name="currentPassword" class="form-control" placeholder="Enter current password to confirm email change">
+                                <div class="form-text">Only needed if changing email.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Current Photo</label><br>
+                                <img src="<%= user.photo && user.photo.trim() !== '' ? user.photo : '/Assets/default-user.png' %>" alt="User Photo" class="img-thumbnail" style="max-width: 150px;">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Upload New Photo</label>
+                                <input type="file" class="form-control" name="photo" accept="image/*">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="/profile" class="btn btn-secondary ms-2">Cancel</a>
+                        </form>
+    </div>
