@@ -3,29 +3,15 @@ const router = express.Router();
 const Contact = require("../models/contact.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const { isLoggedIn } = require("../utils/middleware.js");
-
 const { storage } = require("../cloudinaryConfig");
-
 const multer = require("multer");
-
 const upload = multer({ storage });
+
+const homeController = require("../Controllers/home_c.js");
 
 
 //home page
-router.get("/", isLoggedIn, wrapAsync(async(req, res) => {
-
-
-    const user = req.user;
-    const userId = user._id;
-
-    const allContacts = await Contact.find({ userId });
-    res.render("home", {
-        allContacts,
-        userId,
-        userPhoto: user.photo,
-        addToFolder: false
-    });
-}));
+router.get("/", isLoggedIn, wrapAsync(homeController.home));
 
 
 

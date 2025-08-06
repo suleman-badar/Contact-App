@@ -46,11 +46,12 @@ router.post("/", saveRedirectUrl, async(req, res, next) => {
         }
 
         req.logIn(authenticatedUser, (err) => {
-            if (err) {
-                return next(err);
-            }
-            res.redirect(res.locals.redirectUrl);
+            if (err) return next(err);
+
+            const redirectUrl = res.locals.redirectUrl || "/home";
+            res.redirect(redirectUrl);
         });
+
     })(req, res, next);
 });
 
