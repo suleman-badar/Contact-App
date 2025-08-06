@@ -29,13 +29,13 @@
                             <label for="photo" class="form-label">Change Image</label>
                             <input type="file" class="form-control mb-2" id="photo" name="photo" accept="image/*">
                             <% if (contact.photo) { %>
-                                <img src="<%= contact.photo %>" alt="Current Photo" class="image-preview mt-1">
+                                <img src="<%= contact.photo %>" alt="Current Photo" class="image-preview mt-1" style="max-width: 150px; height: auto;">
                                 <% } %>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" name="address" value="<%= contact.address %>">
+                        <div class=" col-md-6 ">
+                            <label for="address " class="form-label ">Address</label>
+                            <input type="text " class="form-control " id="address " name="address " value="<%=contact.address %>">
                         </div>
 
                         <div class="col-md-6">
