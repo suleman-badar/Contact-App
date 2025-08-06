@@ -95,7 +95,7 @@ main().then(async() => {
 // mongoose.connect=
 
 async function main() {
-    await mongoose.connect('mongodb://localhost:27017/contactsDB' || process.env.MONGO_URI)
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/contactsDB')
         .then(() => console.log("✅ MongoDB connected"))
         .catch(err => console.error("❌ MongoDB error:", err));
 
