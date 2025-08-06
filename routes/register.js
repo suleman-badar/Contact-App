@@ -69,15 +69,20 @@ router.post("/", upload.single("photo"), wrapAsync(async(req, res) => {
 
     try {
         const reg = await User.register(user, password);
-        req.session.formData = null;
-        req.flash("success", "User Registered Successfully");
-        return res.redirect("/login");
+        req.login(reg, (err) => {
+            if (err) {
+                return next(err);
+            }
+            req.session.formData = null;
+            req.flash("success", "User Registered Successfully");
+            return res.redirect("/home");
+        })
     } catch (err) {
-        return res.status(400).render("register", {
+        req.flash("error", "Some error occured. Please try again")
+        return res.render("register", {
             name,
             email,
             dob,
-            error: err.message,
         });
     }
 }));
