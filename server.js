@@ -1,8 +1,12 @@
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+
 const express = require("express");
 const path = require("path");
 const methodOverride = require('method-override');
-const dotenv = require("dotenv");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const ejsMate = require("ejs-mate");
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
@@ -15,15 +19,11 @@ const register = require("./routes/register.js");
 const folders = require("./routes/folder.js");
 const profile = require("./routes/profile.js");
 
-dotenv.config();
-
 
 let app = express();
 app.set("view engine", "ejs");
 app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
-
-
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride('_method'));
@@ -34,7 +34,44 @@ app.use(express.urlencoded({
     limit: '10mb', // increase payload size
     parameterLimit: 10000 // increase number of parameters allowed
 }));
-app.use(session({
+
+
+//database connection
+main().then(async() => {
+    console.log("Main Connection Successsful");
+
+    app.listen(port, () => {
+        console.log("working");
+    });
+
+}).catch((err) => {
+    console.log("Connection issue");
+    console.log(err);
+});
+
+const MONGO_URL = process.env.MONGO_URI;
+
+async function main() {
+    await mongoose.connect(MONGO_URL)
+        .then(() => console.log("✅ MongoDB connected"))
+        .catch(err => console.error("❌ MongoDB error:", err));
+
+    console.log("Server started at: http://localhost:" + port);
+};
+
+const store = MongoStore.create({
+    mongoUrl: MONGO_URL,
+    crypto: {
+        secret: process.env.MONGO_STORE_SECRET
+    },
+    touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => {
+    console.log("Error in Mongo Session Store", err);
+});
+const sessionOptions = {
+    store,
     secret: process.env.EXPRESS_SESSION_SECRET || 'mysecret',
     resave: false,
     saveUninitialized: true,
@@ -43,7 +80,10 @@ app.use(session({
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
     }
-}));
+};
+
+
+app.use(session(sessionOptions));
 app.use(flash());
 
 app.use(passport.initialize());
@@ -78,32 +118,11 @@ function isLoggedIn(req, res, next) {
 const port = process.env.PORT || 8080;
 
 
-// const MONGO_URL = process.env.MONGO_URL;
 
-main().then(async() => {
-    console.log("Main Connection Successsful");
 
-    app.listen(port, () => {
-        console.log("working");
-    });
 
-}).catch((err) => {
-    console.log("Connection issue");
-    console.log(err);
-});
-
-// mongoose.connect=
-
-async function main() {
-    await mongoose.connect('mongodb://localhost:27017/contactsDB' || process.env.MONGO_URI)
-        .then(() => console.log("✅ MongoDB connected"))
-        .catch(err => console.error("❌ MongoDB error:", err));
-
-    console.log("Server started at: http://localhost:" + port);
-};
 
 app.use("/home", home);
-
 app.use("/register", register);
 app.use("/login", login);
 app.use("/folders", folders);
