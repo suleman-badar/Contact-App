@@ -101,7 +101,7 @@
             <script>
                 function deleteContact(contactId) {
                     const form = document.getElementById('global-delete-form');
-                    form.action = `/home/contact/${contactId}?_method=DELETE/edit`;
+                    form.action = `/home/contact/${contactId}/edit?_method=DELETE`;
                     form.submit();
                 }
             </script>
