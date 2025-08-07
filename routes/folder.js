@@ -1,31 +1,41 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const { isLoggedIn } = require("../utils/middleware.js");
-const folderController = require("../Controllers/folder_c.js")
+const { isLoggedIn, verifyFolderOwnership } = require("../utils/middleware.js");
+const folderController = require("../Controllers/folder_c.js");
 
 
-//to get folders
-router.get("/", isLoggedIn, wrapAsync(folderController.folder_get));
+router.use(isLoggedIn);
 
 
-//to create new folders
-router.post("/create", isLoggedIn, wrapAsync(folderController.newFolder));
+// Folder main routes
+router.route("/")
+    .get(wrapAsync(folderController.folder_get))
+    .post(wrapAsync(folderController.newFolder));
 
 
-//to delete folders
-router.delete("/delete/:folderId", isLoggedIn, wrapAsync(folderController.deleteFolder));
 
 
-//to get home page on clicking to add contacts in folders page
-router.get("/add-contacts/:folderId", isLoggedIn, wrapAsync(folderController.addingContacts_get));
+// Folder contact management routes
 
 
-// Add selected contacts to a folder
-router.post("/add-to-folder/:folderId", isLoggedIn, wrapAsync(folderController.addingContacts_post));
+//to View contacts inside a folder
+router.get("/:folderId/view", verifyFolderOwnership, wrapAsync(folderController.viewContacts));
 
 
-// View contacts inside a specific folder
-router.get("/:folderId", isLoggedIn, wrapAsync(folderController.viewContacts));
+router.route("/:folderId")
+    .get(verifyFolderOwnership,
+        wrapAsync(folderController.addingContacts_get)) //get page to add contacts to a folder
+    .post(verifyFolderOwnership,
+        wrapAsync(folderController.addingContacts_post)) //add contacst to a specific folder
+    .delete(verifyFolderOwnership,
+        wrapAsync(folderController.deleteFolder)); //delete a folder
+
+// Remove a contact from a folder
+router.delete("/:folderId/remove/:contactId", verifyFolderOwnership, wrapAsync(folderController.removeContactFromFolder));
+
+
+//remove multiple contacst from a folder
+router.delete("/:folderId/remove-multiple", verifyFolderOwnership, wrapAsync(folderController.removeMultipleFromFolder));
 
 module.exports = router;

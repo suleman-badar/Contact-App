@@ -4,84 +4,96 @@
 
         <% if (addToFolder) { %>
             <!-- Add To Folder Form -->
-            <form id="addToFolderForm" action="/folders/add-to-folder/<%= folderId %>" method="POST">
+            <form id="addToFolderForm" action="/folders/<%= folderId %>" method="POST">
                 <% } else { %>
                     <!-- Delete Form -->
-                    <form id="deleteSelectedForm" action="/home/delete-multiple?_method=DELETE" method="POST">
-                        <% } %>
-
-                            <div class="scroll-wrapper no-scrollbar">
-
-                                <!-- Header row -->
-                                <div class="row gx-0 fw-bold py-2 border-bottom text-start min-table-width">
-                                    <div class="col-2 d-flex gap-2">
-                                        <input type="checkbox" class="selectAll" />
-                                        <div>Name</div>
-                                    </div>
-
-                                    <div class="col-4 text-center">Actions</div>
-                                    <div class="col-3">Number</div>
-                                    <div class="col-3">Email</div>
-                                </div>
-                                <% if (typeof searchTerm !== 'undefined' && searchTerm) { %>
-                                    <div class="d-flex justify-content-center align-items-center gap-3">
-                                        <a href="/home" class="btn-close" aria-label="Close"></a>
-
-                                        <p class="text-muted mb-0">Showing results for "
-                                            <%= searchTerm %>"</p>
-                                    </div>
-
+                    <% if (viewingFolder) { %>
+                        <form id="deleteSelectedForm" action="/folders/<%= folderId %>/remove-multiple?_method=DELETE" method="POST">
+                            <% } else { %>
+                                <form id="deleteSelectedForm" action="/home/delete-multiple?_method=DELETE" method="POST">
                                     <% } %>
 
-                                        <% if (allContacts.length === 0) { %>
-                                            <p class="text-danger">No contacts found.</p>
-                                            <% } %>
-                                                <% if (addToFolder) { %>
-                                                    <p class="text-muted">Select contacts to add...</p>
+                                        <% } %>
+
+                                            <div class="scroll-wrapper no-scrollbar">
+
+                                                <!-- Header row -->
+                                                <div class="row gx-0 fw-bold py-2 border-bottom text-start min-table-width">
+                                                    <div class="col-2 d-flex gap-2">
+                                                        <input type="checkbox" class="selectAll" />
+                                                        <div>Name</div>
+                                                    </div>
+
+                                                    <div class="col-4 text-center">Actions</div>
+                                                    <div class="col-3">Number</div>
+                                                    <div class="col-3">Email</div>
+                                                </div>
+                                                <% if (typeof searchTerm !== 'undefined' && searchTerm) { %>
+                                                    <div class="d-flex justify-content-center align-items-center gap-3">
+                                                        <a href="/home" class="btn-close" aria-label="Close"></a>
+
+                                                        <p class="text-muted mb-0">Showing results for "
+                                                            <%= searchTerm %>"</p>
+                                                    </div>
+
                                                     <% } %>
-                                                        <!-- Data rows -->
-                                                        <% for (let contact of allContacts) { %>
-                                                            <div class="row gx-0 align-items-center py-2 border-bottom text-center min-table-width contact-row">
-                                                                <div class="col-2 d-flex align-items-center justify-content-start gap-2 ">
-                                                                    <input type="checkbox" class="contact-checkbox" name="contactIds" value="<%= contact._id %>" />
-                                                                    <img src="<%= contact.photo && contact.photo.trim() !== ''  !== '' ? contact.photo : '/Assets/default-contact.png' %>" class="rounded-circle flex-shrink-0" width="40" height="40" alt="user photo" style="min-width: 40px; min-height: 40px;" />
 
-                                                                    <span><%= contact.name %></span>
-                                                                </div>
-
-                                                                <div class="col-4 d-flex justify-content-center gap-2">
-                                                                    <a href="/home/info/<%= contact._id %>" class="btn btn-sm btn-outline-info" title="Info">
-                                                                        <i class="fas fa-circle-info"></i>
-                                                                    </a>
-                                                                    <a href="/home/contact/<%= contact._id %>/edit" class="btn btn-sm btn-outline-primary" title="Edit">
-                                                                        <i class="fas fa-pen"></i>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteContact('<%= contact._id %>')">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-
-                                                                <div class="col-3 text-start">
-                                                                    <i class="fas fa-phone me-1"></i>
-                                                                    <%= contact.number %>
-                                                                </div>
-
-                                                                <div class="col-3 text-start">
-                                                                    <i class="fas fa-envelope me-1"></i>
-                                                                    <%= contact.email %>
-                                                                </div>
-                                                            </div>
+                                                        <% if (allContacts.length === 0) { %>
+                                                            <p class="text-danger">No contacts found.</p>
                                                             <% } %>
+                                                                <% if (addToFolder) { %>
+                                                                    <p class="text-muted">Select contacts to add...</p>
+                                                                    <% } %>
+                                                                        <!-- Data rows -->
+                                                                        <% for (let contact of allContacts) { %>
+                                                                            <div class="row gx-0 align-items-center py-2 border-bottom text-center min-table-width contact-row">
+                                                                                <div class="col-2 d-flex align-items-center justify-content-start gap-2 ">
+                                                                                    <input type="checkbox" class="contact-checkbox" name="contactIds" value="<%= contact._id %>" />
+                                                                                    <img src="<%= contact.photo && contact.photo.trim() !== ''  !== '' ? contact.photo : '/Assets/default-contact.png' %>" class="rounded-circle flex-shrink-0" width="40" height="40" alt="user photo" style="min-width: 40px; min-height: 40px;" />
 
-                            </div>
-                    </form>
+                                                                                    <span><%= contact.name %></span>
+                                                                                </div>
+
+                                                                                <div class="col-4 d-flex justify-content-center gap-2">
+                                                                                    <% if (viewingFolder) { %>
+                                                                                        <button type="submit" formaction="/folders/<%= folderId %>/remove/<%= contact._id %>?_method=DELETE" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to remove this contact from the folder?')">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
+                                                                                        <% } else { %>
+                                                                                            <a href="/home/<%= contact._id %>/view" class="btn btn-sm btn-outline-info" title="Info">
+                                                                                                <i class="fas fa-circle-info"></i>
+                                                                                            </a>
+                                                                                            <a href="/home/contact/<%= contact._id %>/edit" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                                                <i class="fas fa-pen"></i>
+                                                                                            </a>
+                                                                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteContact('<%= contact._id %>')">
+                                                                                <i class="fas fa-trash"></i>
+                                                                            </button>
+                                                                                            <% } %>
+                                                                                </div>
+
+
+
+                                                                                <div class="col-3 text-start">
+                                                                                    <i class="fas fa-phone me-1"></i>
+                                                                                    <%= contact.number %>
+                                                                                </div>
+
+                                                                                <div class="col-3 text-start">
+                                                                                    <i class="fas fa-envelope me-1"></i>
+                                                                                    <%= contact.email %>
+                                                                                </div>
+                                                                            </div>
+                                                                            <% } %>
+
+                                            </div>
+                                </form>
     </div>
-    <%if(!addToFolder){%>
+    <%if(!addToFolder && !viewingFolder){%>
         <a href="/home/add-contact" class="btn btn-primary btn-lg rounded-circle shadow position-fixed" style="bottom: 30px; right: 30px; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; z-index: 999;">
             <i class="fa fa-plus"></i>
         </a>
         <%}%>
-
 
             <!-- Hidden form for delete -->
             <form id="global-delete-form" method="POST" style="display: none;"></form>

@@ -37,14 +37,19 @@ module.exports.deleteFolder = async(req, res) => {
 module.exports.addingContacts_get = async(req, res) => {
     const folderId = req.params.folderId;
     const user = req.user;
-    const allContacts = await Contact.find({ userId: user._id });
+    const folder = await Folder.findById(folderId).populate("contacts");
 
+    const allContacts = await Contact.find({
+        userId: user._id,
+        _id: { $nin: folder.contacts.map(c => c._id) } // Exclude already added contacts
+    });
     res.render("home", {
         allContacts,
         userId: user._id,
         userPhoto: user.photo,
         addToFolder: true,
-        folderId
+        folderId,
+        viewingFolder: false
     });
 }
 
@@ -75,6 +80,43 @@ module.exports.viewContacts = async(req, res) => {
         allContacts: folder.contacts,
         userId: user._id,
         userPhoto: user.photo,
-        addToFolder: false
+        addToFolder: false,
+        folderId: folderId,
+        viewingFolder: true
     });
 }
+
+
+// Remove a contact from a specific folder
+module.exports.removeContactFromFolder = async(req, res) => {
+    const { folderId, contactId } = req.params;
+
+    await Folder.findByIdAndUpdate(folderId, {
+        $pull: { contacts: contactId }
+    });
+
+    req.flash("success", "Contact removed from folder.");
+    res.redirect(`/folders/${folderId}/view`);
+};
+
+
+
+//remove multiple from a folder
+module.exports.removeMultipleFromFolder = async(req, res) => {
+    const { folderId } = req.params;
+    const { contactIds } = req.body;
+
+    if (!contactIds || contactIds.length === 0) {
+        req.flash("error", "No contacts selected.");
+        return res.redirect(`/folders/${folderId}/view`);
+    }
+
+    const idsToRemove = Array.isArray(contactIds) ? contactIds : [contactIds];
+
+    await Folder.findByIdAndUpdate(folderId, {
+        $pull: { contacts: { $in: idsToRemove } }
+    });
+
+    req.flash("success", "Selected contacts removed from the folder.");
+    res.redirect(`/folders/${folderId}/view`);
+};

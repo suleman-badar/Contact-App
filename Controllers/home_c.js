@@ -13,12 +13,14 @@ module.exports.getHomePage = async(req, res) => {
         allContacts,
         userId,
         userPhoto: user.photo,
-        addToFolder: false
+        addToFolder: false,
+        viewingFolder: false
+
     });
 }
 
 module.exports.addContacts_get = (req, res) => {
-    res.render("add-contact.ejs", { addToFolder: false });
+    res.render("add-contact.ejs", { addToFolder: false, viewingFolder: false });
 }
 
 
@@ -156,6 +158,7 @@ module.exports.searchQuery = async(req, res) => {
         userId: user._id,
         userPhoto: user.photo,
         searchTerm: search || "",
-        addToFolder: false
+        addToFolder: false,
+        viewingFolder: false
     });
 }

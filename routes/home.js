@@ -24,8 +24,8 @@ router.route("/add-contact")
     );
 
 
-//Individual data fetching
-router.get("/info/:id", verifyContactOwnership, wrapAsync(homeController.contactInfo));
+//View contact
+router.get("/:id/view", verifyContactOwnership, wrapAsync(homeController.contactInfo));
 
 
 // Contact edit routes (individual)

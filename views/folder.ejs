@@ -17,19 +17,19 @@
                                         <%= folder.name %>
                                     </h5>
                                     <div class="d-flex justify-content-between mt-3">
-                                        <form action="/folders/add-contacts/<%= folder._id %>" method="get">
+                                        <form action="/folders/<%= folder._id %>" method="get">
 
                                             <button type="submit" class="btn btn-sm btn-outline-primary">
                                                 <i class="fa-solid fa-pen-to-square me-1"></i>Add Contacts
                                             </button>
                                         </form>
-                                        <form action="/folders/<%= folder._id %>" method="get">
+                                        <form action="/folders/<%= folder._id %>/view" method="get">
                                             <button type="submit" class="btn btn-sm btn-outline-primary">
                                                             <i class="fa-solid fa-eye" style="background-color: inherit;"></i>View
                                                         </button>
                                         </form>
 
-                                        <form action="/folders/delete/<%= folder._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure?')">
+                                        <form action="/folders/<%= folder._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure?')">
                                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                                             <i class="fa-solid fa-trash me-1" style="background-color: inherit;"></i>Delete
                                                         </button>
@@ -44,7 +44,7 @@
         </div>
         <div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <form action="/folders/create" method="POST" class="modal-content">
+                <form action="/folders" method="POST" class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addFolderModalLabel">Create New Folder</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

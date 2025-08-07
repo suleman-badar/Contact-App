@@ -1,4 +1,6 @@
 const Contact = require("../models/contact");
+const Folder = require("../models/folder.js");
+
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -29,5 +31,15 @@ module.exports.verifyContactOwnership = async(req, res, next) => {
 
     // Attach contact to request so controller doesn't have to query again
     req.contact = contact;
+    next();
+};
+
+module.exports.verifyFolderOwnership = async(req, res, next) => {
+    const { folderId } = req.params;
+    const folder = await Folder.findById(folderId);
+    if (!folder || !folder.userId.equals(req.user._id)) {
+        req.flash("error", "You do not have permission to access this folder.");
+        return res.redirect("/folders");
+    }
     next();
 };
