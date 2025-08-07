@@ -8,27 +8,23 @@ const upload = multer({ storage });
 const profileController = require("../Controllers/profile_c.js");
 
 
+router.use(isLoggedIn);
+
+
 //rendering to profile of user
-router.get("/", isLoggedIn, wrapAsync(profileController.getProfile));
-
-//rendering to edit profile page
-router.get('/edit', isLoggedIn, profileController.editProfile_get);
+router.get("/", wrapAsync(profileController.getProfile));
 
 
-//edit req for profile
-router.post("/edit", isLoggedIn, upload.single("photo"), wrapAsync(profileController.editProfile_post));
+//Profile Editing routes
+router.route("/edit")
+    .get(profileController.editProfile_get)
+    .post(upload.single("photo"),
+        wrapAsync(profileController.editProfile_post));
 
-
-
-//changing user password,Get request
-router.get('/change-password', isLoggedIn, profileController.changePass_get);
-
-
-
-//changing Password
-router.post('/change-password', isLoggedIn, wrapAsync(profileController.changePass_post));
-
-
+//Chnaging password routes
+router.route("/change-password")
+    .get(profileController.changePass_get)
+    .post(wrapAsync(profileController.changePass_post));
 
 
 module.exports = router;

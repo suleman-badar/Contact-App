@@ -3,12 +3,13 @@ const router = express.Router();
 const { saveRedirectUrl } = require("../utils/middleware.js");
 const loginController = require("../Controllers/login_c.js");
 
-//get login page
-router.get("/", loginController.getLogin);
+
+//login Routes
+router.route("/")
+    .get(loginController.getLogin)
+    .post(saveRedirectUrl, loginController.checkingUser);
 
 
-//checking user credentials to let them login
-router.post("/", saveRedirectUrl, loginController.checkingUser);
 
 //logging out user
 router.get("/logout", loginController.logoutUser);
