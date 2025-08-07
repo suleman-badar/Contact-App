@@ -3,51 +3,51 @@ const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const { isLoggedIn } = require("../utils/middleware.js");
 const { verifyContactOwnership } = require("../utils/middleware.js");
-
 const { storage } = require("../cloudinaryConfig");
 const multer = require("multer");
 const upload = multer({ storage });
-
 const homeController = require("../Controllers/home_c.js");
+
+router.use(isLoggedIn);
 
 
 //home page
-router.get("/", isLoggedIn, wrapAsync(homeController.getHomePage));
+router.get("/", wrapAsync(homeController.getHomePage));
 
 
 
-// to get contact form
-
-router.get("/add-contact", isLoggedIn, homeController.addContacts_get);
-
-
-
-//adding form data to dataBase
-router.post("/add-contact", isLoggedIn, upload.single('photo'), wrapAsync(homeController.addContacts_post));
+//Add-contact Route
+router.route("/add-contact")
+    .get(homeController.addContacts_get)
+    .post(upload.single('photo'),
+        wrapAsync(homeController.addContacts_post)
+    );
 
 
 //Individual data fetching
-router.get("/info/:id", isLoggedIn, verifyContactOwnership, wrapAsync(homeController.contactInfo));
+router.get("/info/:id", verifyContactOwnership, wrapAsync(homeController.contactInfo));
 
 
-//rendering to edit page of individual contact
-router.get("/edit/:id", isLoggedIn, verifyContactOwnership, wrapAsync(homeController.editContacts_get));
+// Contact edit routes (individual)
+router.route("/contact/:id/edit")
+    .get(verifyContactOwnership,
+        wrapAsync(homeController.editContacts_get))
+    .put(upload.single("photo"),
+        verifyContactOwnership,
+        wrapAsync(homeController.editContacts_put))
+    .delete(verifyContactOwnership,
+        wrapAsync(homeController.deleteContact)
+    );
 
 
-//put request for edited data
-router.put("/edit/:id", isLoggedIn, upload.single("photo"), verifyContactOwnership, wrapAsync(homeController.editContacts_put));
 
 
-//delete contact 
-router.delete("/delete/:id", isLoggedIn, verifyContactOwnership, wrapAsync(homeController.deleteContact));
-
-
-//delete multiple
-router.delete("/delete-multiple", isLoggedIn, wrapAsync(homeController.deleteMultipleContacts));
+// Bulk delete route (for multiple contacts)
+router.delete("/delete-multiple", wrapAsync(homeController.deleteMultipleContacts));
 
 
 //search Query
-router.get("/search", isLoggedIn, wrapAsync(homeController.searchQuery));
+router.get("/search", wrapAsync(homeController.searchQuery));
 
 
 
