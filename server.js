@@ -74,7 +74,7 @@ const sessionOptions = {
     store,
     secret: process.env.EXPRESS_SESSION_SECRET || 'mysecret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -107,13 +107,6 @@ app.use((req, res, next) => {
 });
 
 
-function isLoggedIn(req, res, next) {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in");
-        return res.redirect("/login");
-    }
-    next();
-}
 
 const port = process.env.PORT || 8080;
 
