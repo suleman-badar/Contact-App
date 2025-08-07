@@ -64,7 +64,6 @@ main().then(async() => {
 const MONGO_URL = process.env.MONGO_URI;
 
 
-
 const store = MongoStore.create({
     mongoUrl: MONGO_URL,
     crypto: {
