@@ -21,6 +21,8 @@ const profile = require("./routes/profile.js");
 
 
 let app = express();
+const port = process.env.PORT || 8080;
+
 app.set("view engine", "ejs");
 app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
@@ -37,11 +39,21 @@ app.use(express.urlencoded({
 
 
 //database connection
+async function main() {
+    await mongoose.connect(MONGO_URL)
+        .then(() => console.log("✅ MongoDB connected"))
+        .catch(err => {
+            console.error("❌ MongoDB error:", err);
+            process.exit(1); // exit on DB connection failure
+        });
+
+};
+
 main().then(async() => {
     console.log("Main Connection Successsful");
 
     app.listen(port, () => {
-        console.log("working");
+        console.log(`Server started on port ${port}`);
     });
 
 }).catch((err) => {
@@ -51,13 +63,7 @@ main().then(async() => {
 
 const MONGO_URL = process.env.MONGO_URI;
 
-async function main() {
-    await mongoose.connect(MONGO_URL)
-        .then(() => console.log("✅ MongoDB connected"))
-        .catch(err => console.error("❌ MongoDB error:", err));
 
-    console.log("Server started at: http://localhost:" + port);
-};
 
 const store = MongoStore.create({
     mongoUrl: MONGO_URL,
@@ -105,14 +111,6 @@ app.use((req, res, next) => {
     res.locals.user = req.user || null;
     next();
 });
-
-
-
-const port = process.env.PORT || 8080;
-
-
-
-
 
 
 app.use("/home", home);
